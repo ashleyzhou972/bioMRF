@@ -13,6 +13,7 @@ dm_call_wrapper<-function(total_iter,N, y, mat_dgcmatrix, vars, bounds_a, bounds
 	else if (class(mat_dgcmatrix)!='dgCMatrix') {
 		stop("Please input neighborhood matrix in 'dgCMatrix' class.\n Use as(yourmatrix, 'dgCMatrix') in the Matrix package\n")
 	}
+  print("Hello")
   att = attributes(mat_dgcmatrix)
   dim = att$Dim[1]
   print(is.integer(dim))
