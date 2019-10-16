@@ -1,2 +1,2 @@
 # bioMRF
-hierarchical Markov Random Field model for analysis of spatial dependency 
+R package for hierarchical Markov Random Field model for analysis of spatial dependency 
