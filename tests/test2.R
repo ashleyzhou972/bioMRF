@@ -17,13 +17,9 @@ n = nrow(y)
 nnz = length(attributes(new_neighbor)$x)
 cat("Number of nonzero elements in neighborhood matrix is ", nnz, "\n")
 
-evalues = eigen(new_neighbor)$values #do eigen using the sparse matrix format
-eta_l = 1/min(evalues)
-cat('lower bound for eta', eta_l, '\n')
-eta_u = 1/max(evalues)
-cat('upper bound for eta', eta_u, '\n')
-load_y = TRUE
+#bounds_e = PhiMRF::get_eta_param_space_small(new_neighbor)
 
+new_new_neighbor = preprocess_big(new_neighbor)$new_m
 #########toggle#####################
 vars<-c(2, 1.5, 0.02, 2)
 total_iter = 2000
@@ -35,9 +31,7 @@ shouldsave = F
 #there are four steps of metropolis in each iteration (including double metropolis)
 
 #parameters for the prior distributions (uniform), for alpha, eta and tau
-bounds_a = c(-10,10)
-bounds_e = c(eta_l, eta_u)
-bounds_t = c(0,10) #This is the range for tau
+
 
 #inital guess for alpha, beta and tau^2
 inis1 = c(0.1,0.0,0.1)
