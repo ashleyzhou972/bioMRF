@@ -1,0 +1,232 @@
+chrm22 
+Number of nonzero elements in neighborhood matrix is  1132 
+lower bound for eta -2 
+upper bound for eta 2 
+[1] "Hello"
+[1] TRUE
+###########################################
+Size of data vector is 148
+Number of samples is 2
+Total number of iterations is 2000
+###########################################
+MC Iteration 1
+MC Iteration 11
+MC Iteration 21
+MC Iteration 31
+MC Iteration 41
+MC Iteration 51
+MC Iteration 61
+MC Iteration 71
+MC Iteration 81
+MC Iteration 91
+MC Iteration 101
+MC Iteration 111
+MC Iteration 121
+MC Iteration 131
+MC Iteration 141
+MC Iteration 151
+MC Iteration 161
+MC Iteration 171
+MC Iteration 181
+MC Iteration 191
+MC Iteration 201
+MC Iteration 211
+MC Iteration 221
+MC Iteration 231
+MC Iteration 241
+MC Iteration 251
+MC Iteration 261
+MC Iteration 271
+MC Iteration 281
+MC Iteration 291
+MC Iteration 301
+MC Iteration 311
+MC Iteration 321
+MC Iteration 331
+MC Iteration 341
+MC Iteration 351
+MC Iteration 361
+MC Iteration 371
+MC Iteration 381
+MC Iteration 391
+MC Iteration 401
+MC Iteration 411
+MC Iteration 421
+MC Iteration 431
+MC Iteration 441
+MC Iteration 451
+MC Iteration 461
+MC Iteration 471
+MC Iteration 481
+MC Iteration 491
+MC Iteration 501
+MC Iteration 511
+MC Iteration 521
+MC Iteration 531
+MC Iteration 541
+MC Iteration 551
+MC Iteration 561
+MC Iteration 571
+MC Iteration 581
+MC Iteration 591
+MC Iteration 601
+MC Iteration 611
+MC Iteration 621
+MC Iteration 631
+MC Iteration 641
+MC Iteration 651
+MC Iteration 661
+MC Iteration 671
+MC Iteration 681
+MC Iteration 691
+MC Iteration 701
+MC Iteration 711
+MC Iteration 721
+MC Iteration 731
+MC Iteration 741
+MC Iteration 751
+MC Iteration 761
+MC Iteration 771
+MC Iteration 781
+MC Iteration 791
+MC Iteration 801
+MC Iteration 811
+MC Iteration 821
+MC Iteration 831
+MC Iteration 841
+MC Iteration 851
+MC Iteration 861
+MC Iteration 871
+MC Iteration 881
+MC Iteration 891
+MC Iteration 901
+MC Iteration 911
+MC Iteration 921
+MC Iteration 931
+MC Iteration 941
+MC Iteration 951
+MC Iteration 961
+MC Iteration 971
+MC Iteration 981
+MC Iteration 991
+MC Iteration 1001
+MC Iteration 1011
+MC Iteration 1021
+MC Iteration 1031
+MC Iteration 1041
+MC Iteration 1051
+MC Iteration 1061
+MC Iteration 1071
+MC Iteration 1081
+MC Iteration 1091
+MC Iteration 1101
+MC Iteration 1111
+MC Iteration 1121
+MC Iteration 1131
+MC Iteration 1141
+MC Iteration 1151
+MC Iteration 1161
+MC Iteration 1171
+MC Iteration 1181
+MC Iteration 1191
+MC Iteration 1201
+MC Iteration 1211
+MC Iteration 1221
+MC Iteration 1231
+MC Iteration 1241
+MC Iteration 1251
+MC Iteration 1261
+MC Iteration 1271
+MC Iteration 1281
+MC Iteration 1291
+MC Iteration 1301
+MC Iteration 1311
+MC Iteration 1321
+MC Iteration 1331
+MC Iteration 1341
+MC Iteration 1351
+MC Iteration 1361
+MC Iteration 1371
+MC Iteration 1381
+MC Iteration 1391
+MC Iteration 1401
+MC Iteration 1411
+MC Iteration 1421
+MC Iteration 1431
+MC Iteration 1441
+MC Iteration 1451
+MC Iteration 1461
+MC Iteration 1471
+MC Iteration 1481
+MC Iteration 1491
+MC Iteration 1501
+MC Iteration 1511
+MC Iteration 1521
+MC Iteration 1531
+MC Iteration 1541
+MC Iteration 1551
+MC Iteration 1561
+MC Iteration 1571
+MC Iteration 1581
+MC Iteration 1591
+MC Iteration 1601
+MC Iteration 1611
+MC Iteration 1621
+MC Iteration 1631
+MC Iteration 1641
+MC Iteration 1651
+MC Iteration 1661
+MC Iteration 1671
+MC Iteration 1681
+MC Iteration 1691
+MC Iteration 1701
+MC Iteration 1711
+MC Iteration 1721
+MC Iteration 1731
+MC Iteration 1741
+MC Iteration 1751
+MC Iteration 1761
+MC Iteration 1771
+MC Iteration 1781
+MC Iteration 1791
+MC Iteration 1801
+MC Iteration 1811
+MC Iteration 1821
+MC Iteration 1831
+MC Iteration 1841
+MC Iteration 1851
+MC Iteration 1861
+MC Iteration 1871
+MC Iteration 1881
+MC Iteration 1891
+MC Iteration 1901
+MC Iteration 1911
+MC Iteration 1921
+MC Iteration 1931
+MC Iteration 1941
+MC Iteration 1951
+MC Iteration 1961
+MC Iteration 1971
+MC Iteration 1981
+MC Iteration 1991
+num protected: 6
+###########################################
+random walk variance: 2 1.5 0.02 2 
+###########################################
+$w
+[1] 0.2034189
+
+$alpha
+[1] 0.302
+
+$eta
+[1] 0.283
+
+$tau2
+[1] 0.696
+
+###########################################
+Burn-in: 400 
+4.12809 (2.96657, 5.10087) 
+0.59899 (-1.28286, 1.79412) 
+16.31332 (12.16139, 21.29859) 
