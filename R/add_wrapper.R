@@ -7,6 +7,6 @@
 #' add(1,1)
 #' add(10,1)
 #'
-#' @useDynLib bioMRF add_
+#' @useDynLib PhiMRF add_
 #' @export
 add <- function(x, y) .Call(add_, x, y)

@@ -58,7 +58,7 @@
 #'
 #' Liang, F. (2010). A double Metropolis–Hastings sampler for spatial models with intractable normalizing constants. \emph{Journal of Statistical Computation and Simulation}, 80(9), 1007-1022.
 #'
-#' @useDynLib bioMRF double_metropolis_cont
+#' @useDynLib PhiMRF double_metropolis_cont
 #' @export
 pmrf<-function(total_iter, N, y, adj_mat, vars, bounds_e, bounds_a=c(-10,10), bounds_t=c(0,10), inis=c(0.1,0.0,0.1), wInis=rnorm(N, inis[1], sqrt(inis[3]))){
 	if (!is.numeric(total_iter) || !is.numeric(y) || !is.numeric(N) || !is.numeric(vars) || !is.numeric(bounds_a) || !is.numeric(bounds_e) || !is.numeric(bounds_t) || !is.numeric(inis) || !is.numeric(wInis)){
