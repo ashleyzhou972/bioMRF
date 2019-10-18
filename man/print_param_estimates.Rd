@@ -24,5 +24,5 @@ print_param_estimates(ret, 500, 4)
 print_param_estimates(ret, 0, 2)
 }
 \author{
-Naihui Zhou
+Naihui Zhou (ashley.n.zhou@gmail.com)
 }

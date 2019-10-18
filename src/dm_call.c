@@ -214,8 +214,8 @@ SEXP double_metropolis_cont(SEXP T_in, SEXP N_in, SEXP y_in, SEXP dim_in, SEXP v
 	**/
 	for (t = 0; t < T; ++t) {
 		if (t%10==0) {
-			Rprintf("MC Iteration %d\n", t+1);
 			R_CheckUserInterrupt();
+			Rprintf("MC Iteration %d\n", t+1);
 			//printf("MC Iteration %d\n", t+1);
 		}
 		//step1;

@@ -23,5 +23,5 @@ Delete burn in iterations in MCMC
 delete_burn_in(ret, 400)
 }
 \author{
-Naihui Zhou
+Naihui Zhou (ashley.n.zhou@gmail.com)
 }

@@ -23,5 +23,5 @@ Percentage of jumps in MCMC iterations
 get_jump_frequency(ret, 10000, 200)
 }
 \author{
-Naihui Zhou
+Naihui Zhou (ashley.n.zhou@gmail.com)
 }

@@ -2,9 +2,9 @@
 
 export(add)
 export(delete_burn_in)
-export(dm_call_wrapper)
 export(get_jump_frequency)
 export(hello)
+export(pmrf)
 export(print_param_estimates)
 useDynLib(bioMRF,add_)
 useDynLib(bioMRF,double_metropolis_cont)
