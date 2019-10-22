@@ -8,4 +8,5 @@
 *.tar.gz
 rstudio_script.R
 .gitignore
+load_data_into_package.R
 
