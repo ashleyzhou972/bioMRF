@@ -31,34 +31,52 @@ To download another release, go to https://www.ensembl.org/biomart/martview/, se
 
 
 ## Step 2  Generate new linear neighborhoods according to Ensembl gene coordinates
-# Default provided. 
-# This has nothing to do with cellline, only carry out this step if you are using a non-default Ensembl release
-cutoff=10000 
-# cutoff is the cutoff for linear distance
-# i.e. if two genes are more than 10000 bps apart then they are not linear neighbors
-python3 genepairs_collapse_linear.py  "$homedir/intra/linear" ./ensembl_map_coding.txt  "$cutoff"
-#@TODO output_adjacency_linear.R
+
+Default provided. 
+
+This has nothing to do with cellline, only carry out this step if you are using a non-default Ensembl release
+
+- Designate cutoff
+
+cutoff is the cutoff for linear distance, i.e. if two genes are more than 10000 bps apart then they are not linear neighbors
+
+`cutoff==10000`
+- Run script
+
+`python3 genepairs_collapse_linear.py  "$homedir/intra/linear" ./ensembl_map_coding.txt  "$cutoff"`
 
 ## Step 3 Write to the genename folder
-# Default folder is located at ../../rnaseq_processing/gene_names/
-#@TODO
+
+Default folder is provided at [gene_names](/rnaseq_processing/gene_names/)
 
 
 ## Step 4 Process RNA-seq quantification file
-# The RNA-seq quantification files are downloaded from ENCODE
-# Make sure the cell line of your RNAseq file agrees with the cellline for HiC file
-python3 prep_rnaseq.py  ./ensembl_map_coding.txt  "$homedir/rnaseq/ENCFF*.tsv"  $homedir/rnaseq/
+
+The RNA-seq quantification files are downloaded from ENCODE for each cellline.
+
+Make sure the cell line of your RNAseq file agrees with the cellline for HiC file
+
+[Here](https://www.encodeproject.org/experiments/ENCSR000CVT/) is an the example RNA-seq quantification file from GM12878.
+
+`python3 prep_rnaseq.py  ./ensembl_map_coding.txt  "$homedir/rnaseq/ENCFF*.tsv"  $homedir/rnaseq/`
 
 
-# Step 5 Output y 
-# y needs to be in an order that correpsonds to the adjacency matrix from Step 5
-# More than one processed RNA-seq file can be supplied at the same time using wildcards
-# Each RNA-seq file will be read in as a column in a matirx of rnaseq data
-# NO quotes around the last argument if you are using wildcard
+## Step 5 Output y as an R matrix
+
+y needs to be in an order that correpsonds to the adjacency matrix from HiC processing
+
+More than one processed RNA-seq file can be supplied at the same time using wildcards
+
+Each RNA-seq file will be read in as a column in a matirx of rnaseq data
+
+
+```
 for chrm in "${chrms[@]}"
+
 do
 	Rscript prep_y_for_MRF_intra.R "$chrm" $homedir/intra/  ./gene_names/  $homedir/rnaseq/rnaseq_*.txt
 done
+```
 
 
 ### HiC processing
