@@ -16,10 +16,13 @@ All **by-chromosome** intermediate results from each step of pipelines are also 
 - **IMR90** in **10kb resolution**
 - **GM12878** in **10kb resolution**
 
-## RNAseq processing ([script](rnaseq_processing/pipeline_rnaseq.sh))
+## RNAseq processing ([pipeline script](rnaseq_processing/pipeline_rnaseq.sh))
 
 ### Step 0 Setup
-`homedir=/home/nzhou/hic/rao2014/GM12878_10kb/`
+```
+homedir=/home/nzhou/hic/rao2014/GM12878_10kb/
+cd ./rnaseq_processing 
+```
 
 ### Step 1  Ensembl gene ID and coordinates 
 
@@ -82,13 +85,17 @@ done
 ```
 
 
-## HiC processing ([intra script](HiC_processing/pipeline_build.sh))
+## HiC processing ([pipeline script (intra)](HiC_processing/pipeline_build.sh))
+
+Here we use intra-chromosomal as example.
 
 ### Step 0 Setup and download raw data
 
 - Setup home directory
 ```
 homedir=/home/nzhou/hic/rao2014/GM12878_10kb/intra/
+cd ./HiC_processing/intra/
+
 cellline=GM12878
 resolution=10kb
 mkdir $homedir/raw
@@ -127,12 +134,10 @@ use `python3 normalize_and_map_intra.py --help` to check usage and change defaul
 ### Step 2 Collapse interaction frequencies by gene pairs using four summary statistics (mean, median, max and min)
 Default quantile to cutoff interaction frequency is 0.9. 
 
-i.e. if mean (or median, max, min) interaction frequency of a gene pair is greater than the 90% quantile of all gene pairs in that chromosome
-
-then an edge is inferred between the two genes
+i.e. if mean (or median, max, min) interaction frequency of a gene pair is greater than the 90% quantile of all gene pairs in that chromosome, then an edge is inferred between the two genes
 
 `Rscript genepairs_collapse_intra.R $homedir "$quantile" "$resolution"`
-To specify a chromosome, use `Rscript genepairs_collapse_intra.R $homedir "$quantile" "$resolution" '19'`, default is all chromosomes.
+Default is all chromosomes, to specify a chromosome, use `Rscript genepairs_collapse_intra.R $homedir "$quantile" "$resolution" '19'`
 
 
 ### Step 3 (optional) Network info
