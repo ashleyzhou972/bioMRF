@@ -6,7 +6,7 @@ This repository contains
 
 
 The pipeline can be separated into three parts, processing HiC data, processing RNAseq data and running PhiMRF.
-The three pipelines are explained below, as well as in their separate `pipeline_*.sh` files.
+The three pipelines are explained below, as well as in their separate `pipeline_*.sh` files (In HiC processing, the pipeline is further separated into intra- and inter-chromosoma).
 
 If you would like run the pipelines from scratch, simply run `bash pipeline_*.sh` in their respective folders.
 
@@ -19,12 +19,15 @@ All **by-chromosome** intermediate results from each step of pipelines are also 
 ## RNAseq processing
 
 ### Step 1  Ensembl gene ID and coordinates 
+
 (Optional, only carry out this step if you are using a non-default Ensembl release)
+
 Default release: 90
+
 -  Download Ensembl gene ID and coordinates mapping
-To download another release, go to https://www.ensembl.org/biomart/martview/
-Select "Attributes" on the lefthand column, in the expanded table of "GENE", select "Gene stable ID", "Chromosome/scaffold name", "Gene start (bp)" and "Gene end (bp)"; in the expanded table of "External References", select "NCBI gene ID".
-Save the downloaded file as  `./rnaseq_processing/ensembl_map_coding.txt` 
+
+To download another release, go to https://www.ensembl.org/biomart/martview/, select "Attributes" on the lefthand column, in the expanded table of "GENE", select "Gene stable ID", "Chromosome/scaffold name", "Gene start (bp)" and "Gene end (bp)"; in the expanded table of "External References", select "NCBI gene ID".
+- Save the downloaded file as  [ensembl_map_coding.txt](rnaseq_processing/ensembl_map_coding.txt)
 
 
 ## Step 2  Generate new linear neighborhoods according to Ensembl gene coordinates
