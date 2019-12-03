@@ -5,12 +5,22 @@
 library(igraph, warn.conflicts = F)
 library(data.table)
 library(Matrix)
-source('/home/nzhou/hic/IMR90/work/MRF_HIC_GE/analysis/change_neighbor_mat.R')
 #chrms = as.character(seq(1,23,1))
 #chrms = c(chrms,'X')
 #chromosome 1
 #chrms = c('1')
 
+change_mat<-function(sub_neighbor){
+  #sub_neighbor should be a adjacency matrix with
+  #1 indicating edge and 0 indicating no edge
+  dim = dim(sub_neighbor)[1]
+  rowSum_mat = matrix(rep(rowSums(sub_neighbor),dim), byrow=F, nrow=dim)
+  colSum_mat = matrix(rep(colSums(sub_neighbor),dim), byrow=T, nrow=dim)
+  sum_mat = rowSum_mat + colSum_mat
+  sum_mat[sum_mat==0]<--Inf
+  new_neighbor = sub_neighbor/sum_mat
+  return(new_neighbor)
+}
 
 read_genes<-function(genename_folder, chrms){
   all = c()
@@ -23,8 +33,7 @@ read_genes<-function(genename_folder, chrms){
 
 delete_neighbor_edges<-function(homefolder, net, chrm){
   # read neighborhood network directly from hard link
-  print(homefolder)
-  linear_neighbor_cutoff = readRDS(paste0(homefolder, '/linear_neighbors/data/cutoff_10kb/chrm',chrm,'_neighbors_trans.rds'))
+  linear_neighbor_cutoff = readRDS(paste0(homefolder, '/linear/chrm',chrm,'_neighbors_trans.rds'))
   linear_net_cutoff<-graph_from_adjacency_matrix(linear_neighbor_cutoff,weighted = TRUE, 
                                                  mode = "undirected")
   intersection = intersection(net, linear_net_cutoff, keep.all.vertices = F)
@@ -38,7 +47,7 @@ delete_neighbor_edges<-function(homefolder, net, chrm){
   }
 }
 
-add_singletons<-function(homefolder, genename_folder, net, chrms){
+add_singletons<-function(genename_folder, net, chrms){
   # read gene names of each chrmosome directly from hard link
   genes = read_genes(genename_folder, chrms)
   singletons = genes[!(genes%in%V(net)$name)]
@@ -120,7 +129,7 @@ output_graph<-function(homefolder, genename_folder, edge_list, add_singles, dele
     cat("Number of edges", ecount(net0),"\n")
     if (add_singles){
       cat("Adding singletons...\n")
-      net1 = add_singletons(homefolder, genename_folder, net0, chrms)
+      net1 = add_singletons(genename_folder, net0, chrms)
       cat("New number of nodes", vcount(net1),"\n")
       cat("New number of edges", ecount(net1),"\n")
       if (delete_neighbors){

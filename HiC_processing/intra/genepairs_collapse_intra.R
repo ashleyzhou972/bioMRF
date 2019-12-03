@@ -1,17 +1,28 @@
+#!/usr/bin/env Rscript
+
 #########################################################
 #Updated 20190620: varying threshold for each chromosome
 #based on quantile
 #########################################################
 rm(list=ls())
-library(data.table)
-setwd('/home/nzhou/hic/rao2014/IMR90_10kb/intra/by_gene')
-####toggle
-chrms = as.character(seq(1,22,1))
-chrms = c(chrms, 'X')
-quant = 0.90
-#chrms = c("1")
-resolution = '10kb'
+chrs = as.character(seq(1,22,1))
+chrs = c(chrs, 'X')
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)<3) {
+  stop("At least three arguments must be supplied: homedir, quant, resolution. Optional argument: chrs\n", call.=FALSE)
+} else if (length(args)==3) {
+  chrms = chrs
+} else if (length(args)==4){
+  chrms = c(args[4])
+}
+print(args)
 ###
+setwd(args[1])
+quant = as.numeric(args[2])
+resolution = args[3]
+###
+
+library(data.table)
 join_gene_pair<-function(genepair){
   return(paste(as.character(sort(unlist(genepair))), collapse='_'))
 }
@@ -51,7 +62,7 @@ compute_threshold<-function(values, quantile){
 cat("quantile", quant, "\n")
 for (chrm in chrms){
   cat("Chromosome", chrm, "\n")
-  data.read<-read.table(file = paste0('./newnorms/intra_chr', chrm,'_',resolution,'.norm'), header=T)
+  data.read<-read.table(file = paste0('./norm/intra_chr', chrm,'_',resolution,'.norm'), header=T)
   dt = as.data.table(data.read)
   dt[,pair:=join_gene_pair2(gene1, gene2), by = seq_len(nrow(dt))]
   dt<-dt[,c(4,3)]
