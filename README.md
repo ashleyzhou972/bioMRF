@@ -18,6 +18,9 @@ All **by-chromosome** intermediate results from each step of pipelines are also 
 
 ## RNAseq processing ([script](rnaseq_processing/pipeline_rnaseq.sh))
 
+### Step 0 Setup
+`homedir=/home/nzhou/hic/rao2014/GM12878_10kb/`
+
 ### Step 1  Ensembl gene ID and coordinates 
 
 (Optional, only carry out this step if you are using a non-default Ensembl release)
@@ -79,13 +82,23 @@ done
 ```
 
 
-## HiC processing ([intra script](HiC_processing/pipeline_build))
+## HiC processing ([intra script](HiC_processing/pipeline_build.sh))
 
 ### Step 0 Setup and download raw data
 
 - Setup home directory
-
-`homedir=/home/nzhou/hic/rao2014/GM12878_10kb/intra/`
+```
+homedir=/home/nzhou/hic/rao2014/GM12878_10kb/intra/
+cellline=GM12878
+resolution=10kb
+mkdir $homedir/raw
+mkdir $homedir/norm
+mkdir $homedir/data
+mkdir $homedir/data/y
+mkdir $homedir/info
+mkdir $homedir/genepairs
+mkdir $homedir/linear
+```
 
 - Download HiC data from [Rao et al](https://www.ncbi.nlm.nih.gov/pubmed/25497547)
 
@@ -112,7 +125,7 @@ use `python3 normalize_and_map_intra.py --help` to check usage and change defaul
 
 
 ### Step 2 Collapse interaction frequencies by gene pairs using four summary statistics (mean, median, max and min)
-default quantile to cutoff interaction frequency is 0.9. 
+Default quantile to cutoff interaction frequency is 0.9. 
 
 i.e. if mean (or median, max, min) interaction frequency of a gene pair is greater than the 90% quantile of all gene pairs in that chromosome
 
@@ -156,3 +169,14 @@ done
 
 
 ## Running PhiMRF
+The [vignettes](http://htmlpreview.github.io/?https://github.com/ashleyzhou972/PhiMRF/blob/master/vignettes/Introduction-PhiMRF.html) in the [PhiMRF package](https://github.com/ashleyzhou972/PhiMRF) has very detailed examples of how to use the package. 
+
+Two datasets are required,
+
+- observed count `y`, in our case the processed RNA-seq count, available as `$homedir/intra/data/y/chrm*_y.rds`
+- Adjacency matrix of network structure, in our case the processed HiC gene network, available as `$homedir/intra/data/chrm1_0.9_mean_TRUE_FALSE_neighbors_trans.rds`
+
+Example:
+`Rscript run/examples.R`
+
+
