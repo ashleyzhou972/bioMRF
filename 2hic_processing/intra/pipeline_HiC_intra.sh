@@ -26,6 +26,7 @@ echo "Current directory is `pwd`"
 #mkdir $homedir/linear
 
 ### Download
+echo "Step 0 Downloading..."
 #wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_"$cellline"_combined_intrachromosomal_contact_matrices.tar.gz -P $homedir/raw
 # You can also download manually from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525
 # Save it in the raw folder
@@ -33,15 +34,18 @@ echo "Current directory is `pwd`"
 ### Unzip 
 # only unzip the desired resolution and filter
 filter=MAPQGE30
+norm=KR
 # Default read filter is MAPQ>=30, can be changed to 
 # filter=MAPQG0
 # See Supplemental (Extended Experimental Procedure) of Rao et al 2014 (PMID: 25497547) for details
-tar -xvzf $homedir/raw/GSE63525_"$cellline"_combined_intrachromosomal_contact_matrices.tar.gz -C $homedir/raw/ --strip-components 4 --wildcards GM12878_combined/"$resolution"_resolution_intrachromosomal/chr*/"$filter"/chr*_"$resolution".* 
+echo "Step 0 Extracting zipped files..."
+#tar -xvzf $homedir/raw/GSE63525_"$cellline"_combined_intrachromosomal_contact_matrices.tar.gz -C $homedir/raw/ --strip-components 4 --wildcards GM12878_combined/"$resolution"_resolution_intrachromosomal/chr*/"$filter"/*.{RAWobserved,"$norm"norm}
 
 
 ## Step 1 Normalize HiC contacts and map to genes
 # use python3 normalize_and_map_intra.py --help to check usage and change default arguments such as resolution
-python3 normalize_and_map_intra.py $homedir ../../rnaseq_processing/ensembl_map_coding.txt
+echo "Step 1 Normalizing HiC and mapping to genes..."
+#python3 normalize_and_map_intra.py $homedir ../../rnaseq_processing/ensembl_map_coding.txt
 
 
 ## Step 2 Collapse interaction frequencies by gene pairs using four summary statistics (mean, median, max and min)
@@ -49,7 +53,8 @@ quantile=0.9
 # default quantile to cutoff interaction frequency is 0.9. 
 # i.e. if mean (or median, max, min) interaction frequency of a gene pair is greater than the 90% quantile of all gene pairs in that chromosome
 # then an edge is inferred between the two genes
-Rscript genepairs_collapse_intra.R $homedir "$quantile" "$resolution"
+echo "Step 2 Collapsing interactions by gene pairs..."
+#Rscript genepairs_collapse_intra.R $homedir "$quantile" "$resolution"
 # This command takes an optional fourth argument for a single chromosome, default is all chromosomes, e.g.
 #Rscript genepairs_collapse_intra.R $homedir "$quantile" "$resolution" '19'
 
@@ -63,9 +68,11 @@ method="all"
 # method is a variable connected to the summary statistics used. In this step, all are considered
 del="FALSE"
 # del is a variable connected to whether to delete the linear neighboring gene pairs in the HiC network
-for chrm in "${chrms[@]}"
+echo "Step 3 Generating Network info..."
+#for chrm in "${chrms[@]}"
+for chrm in "chrm1"
 do
-	key="$chrm"_"$quant"_all_TRUE_"$del"
+	key="$chrm"_"$quantile"_all_TRUE_"$del"
 	Rscript get_mat_info_intra.R "$key" $homedir  ../../rnaseq_processing/gene_names/
 done
 
@@ -78,9 +85,10 @@ method="mean"
 # method="max"
 del="FALSE" 
 #del=FALSE: Not deleting all linear neighbors from HiC neighbors
+echo "Step 4 Generating adjacency matrices..."
 for chrm in "${chrms[@]}"
 do
-	key="$chrm"_"$quant"_"$method"_TRUE_"$del"
-	Rscript prep_mat_for_MRF_intra.R $key  $homedir ../../rnaseq_processing/gene_names 
+	key="$chrm"_"$quantile"_"$method"_TRUE_"$del"
+	#Rscript prep_mat_for_MRF_intra.R $key  $homedir ../../rnaseq_processing/gene_names 
 done
 

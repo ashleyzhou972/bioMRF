@@ -12,7 +12,7 @@ chrms = c(chrms, 'X')
 ##because already done
 #new_chrms = chrms[-c(1,7,17,23)]
 for (chrm in chrms){
-	edgelist = read_edge_list_from_genepairs('./by_gene/cutoff_10kb', chrm)
+	edgelist = read_edge_list_from_genepairs_intra('./by_gene/cutoff_10kb', chrm)
 	mat = output_adjacency_matrix(edgelist, TRUE, chrm)
 	savedata('./data/cutoff_10kb/',mat,'../rnaseq_copy.txt', paste0('chrm', chrm))
 }

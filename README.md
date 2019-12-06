@@ -5,10 +5,19 @@ This repository contains
 - The source code of the R package [PhiMRF](https://github.com/ashleyzhou972/PhiMRF) is available as a separate repo.
 
 
-The pipeline can be separated into three parts, processing HiC data, processing RNAseq data and running PhiMRF.
-The three pipelines are explained below, as well as in their separate `pipeline_*.sh` files (In HiC processing, the pipeline is further separated into intra- and inter-chromosoma).
+## Structure
 
-If you would like run the pipelines from scratch, simply run `bash pipeline_*.sh` in their respective folders.
+The pipeline can be separated into three parts
+
+- processing RNAseq data 
+
+- processing HiC data
+
+- running PhiMRF.
+
+The three pipelines are explained below, as well as in their separate `pipeline_*.sh` files (In HiC processing, the pipeline is further separated into intra- and inter-chromosomal).
+
+If you would like to run the pipelines from scratch, simply run `bash pipeline_*.sh` in their respective folders.
 
 However, some results in those pipelines are optional or already provided in this repo, so it is recommended that you read through the pipelines, understand each step, and comment out the steps that are unnecessary for your purposes.
 
@@ -85,7 +94,7 @@ done
 ```
 
 
-## HiC processing ([pipeline script (intra)](HiC_processing/pipeline_build.sh))
+## HiC processing ([pipeline script (intra)](HiC_processing/pipeline_HiC_intra.sh))
 
 Here we use intra-chromosomal as example.
 
@@ -162,7 +171,7 @@ Read HiC gene pairs data into edgelists and output adjacency matrix for each gen
 
 `method="mean"`, (alternatives: `method="median"`, `method="min"`, `method="max"`)
 
-`del="FALSE"`, del=FALSE: Not deleting all linear neighbors from HiC neighbors
+`del="FALSE"`: Not deleting all linear neighbors from HiC neighbors
 
 ```
 for chrm in "${chrms[@]}"

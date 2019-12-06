@@ -50,9 +50,11 @@ delete_neighbor_edges<-function(homefolder, net, chrm){
 add_singletons<-function(genename_folder, net, chrms){
   # read gene names of each chrmosome directly from hard link
   genes = read_genes(genename_folder, chrms)
+  cat("Number of genes read:", length(genes), "\n")
   singletons = genes[!(genes%in%V(net)$name)]
   newnet = add_vertices(net, length(singletons), name=singletons)
   newnet<-simplify(newnet, remove.multiple = T, remove.loops = T)
+  cat("vcount in new net:", vcount(newnet),"\n")
   return(newnet)
 }
 
@@ -68,7 +70,7 @@ read_edge_list_from_hiccups<-function(folder, chrms){
   return(as.matrix(edge_list))
 }
 
-read_edge_list_from_genepairs<-function(infolder, chrm, quant, method){
+read_edge_list_from_genepairs_intra<-function(infolder, chrm, quant, method){
   #three methods: according to p-value, q-value and hard threshold on mean
   #for those gene_pair that do not have repetition, 
     #add them if the mean(from one value) is above the 

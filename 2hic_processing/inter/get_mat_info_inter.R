@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 ######################################
-# For general intra HiC networks
+# For general inter HiC networks
 ########################################
 rm(list=ls())
 source('./__get_edge_list.R')
@@ -36,7 +36,7 @@ if (method=='all'){
   linear_neighbor_adj = readRDS(paste0(homedir, '/linear/',chrm_long,'_neighbors_trans.rds'))
   linear_net<-graph_from_adjacency_matrix(linear_neighbor_adj, weighted = TRUE, mode = "undirected")
 
-  edgelist_list = read_edge_list_from_genepairs(paste0(homedir,'/genepairs/'), chrm, quant, method)
+  edgelist_list = read_edge_list_from_genepairs_inter(paste0(homedir,'/genepairs/'), chrm, quant, method)
   cat("read edgelist\n")
   method_names = c("mean", "median", "max", "min")
   i = 1

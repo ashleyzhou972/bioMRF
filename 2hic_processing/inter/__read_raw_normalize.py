@@ -85,7 +85,24 @@ def read_raw_intra(rootfolder, resolution, chrm):
             intra_list.append(inter)                
     return(intra_list)
             
-
+def read_raw_inter(rootfolder, resolution, chrm1, chrm2):
+    """
+    each bin is identified by chromosome and left side of bin
+    """
+    inter_list = list()
+    if chrm1=='X' or (chrm2!='X' and int(chrm1)>=int(chrm2)):
+        sys.stderr.write('Wrong chromosomal input for interchromosomal\n')
+        sys.exit(1)
+    inter_obs_file = os.path.join(rootfolder,'chr%s_%s_%s.RAWobserved' % (chrm1, chrm2, resolution))
+    with open(inter_obs_file,'r') as f:
+        for line in f:
+            fields = line.strip().split()
+            bin1 = bin(fields[0], chrm1)
+            bin2 = bin(fields[1], chrm2)
+            inter = interaction(bin1, bin2)
+            inter.read(fields[2])
+            inter_list.append(inter)
+    return(inter_list)
     
 def read_normalization_vector(rootfolder, norm_name, resolution, chrm):
     """
