@@ -6,10 +6,18 @@ resolution=10kb
 ## Step 0 Setup and download raw data
 
 ### Designate home directory
+
+###################################################
+#CHANGE THIS!
 homedir=/home/nzhou/hic/rao2014/GM12878_10kb/
+####################################################
 
 echo "Home directory is $homedir"
 echo "Current directory is `pwd`"
+
+# Create folders for RNA-seq data
+mkdir $homedir/rnaseq
+mkdir $homedir/rnaseq/gene_names
 
 # Create folders for intra-chromosomal and inter-chromosomal
 for int in 'intra', 'inter'
@@ -64,7 +72,7 @@ tar -xvzf $homedir/inter/raw/GSE63525_"$cellline"_combined_interchromosomal_cont
 ### Download Ensembl gene ID and coordinates mapping
 # To download another release, go to https://www.ensembl.org/biomart/martview/
 # Select "Attributes" on the lefthand column, in the expanded table of "GENE", select "Gene stable ID", "Chromosome/scaffold name", "Gene start (bp)" and "Gene end (bp)"; in the expanded table of "External References", select "NCBI gene ID".
-# Save the downloaded file as  ../../rnaseq_processing/ensembl_map_coding.txt 
+# Save the downloaded file as  ../../1rnaseq_processing/ensembl_map_coding.txt 
 
 
 ## Step 2 Download RNAseq data and map to Ensembl gene ID

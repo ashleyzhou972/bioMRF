@@ -54,42 +54,39 @@ def mathematical_bin_overlap(left, right, step, threshold):
         
     
     
-def gene_mapping_nodup(ensembl_mapping_file,  threshold):
+def gene_mapping_nodup(rnaseq_mapping_file,  threshold):
     """
-    updated 20190421
-    for each gene, map it to all the bins that have at least 
-        "threshold"% overlap. save in dictionary
     updated 20190424
     Do not go over all bin lefts
     Simply do divison and remainders
     """
     gene_dict = dict()
     #outhandle = open(outfile_Ychr,'w')
-    with open(ensembl_mapping_file,'r') as rna:
+    with open(rnaseq_mapping_file,'r') as rna:
         rna.readline()
         for line in rna:
-            fields = line.strip().split(',')
+            fields = line.strip().split('\t')
             gene = fields[0]
             #print('gene: %s\n' % gene)
-            chrm = fields[1]
+            chrm = fields[2]
             if chrm=='Y':
                 #outhandle.write('%s\n' % gene) 
                 continue
-            start = int(fields[2])
-            end = int(fields[3])
+            start = int(fields[3])
+            end = int(fields[4])
             bins = mathematical_bin_overlap(start, end, step, threshold)
             result_bins = set(bins)
             gene_dict[gene] = result_bins
     #outhandle.close()
     return(gene_dict)
 
-def read_gene_chromosome(ensembl_mapping):
+def read_gene_chromosome(rnaseq_mapping):
     chrm_dict = dict()
-    with open(ensembl_mapping,'r') as r:
+    with open(rnaseq_mapping,'r') as r:
         for line in r:
-            fields = line.strip().split(',')
+            fields = line.strip().split('\t')
             gene = fields[0]
-            chrm = fields[1]
+            chrm = fields[2]
             chrm_dict[gene]=chrm
     return(chrm_dict)
     
@@ -163,9 +160,9 @@ if __name__=='__main__':
 
     step = convert_resolution_to_step(args.reso)
     
-    ensembl_mapping_file = args.coords_file
-    newtt = gene_mapping_nodup(ensembl_mapping_file, args.overlap)
-    chrm_dict = read_gene_chromosome(ensembl_mapping_file)
+    rnaseq_mapping_file = args.coords_file
+    newtt = gene_mapping_nodup(rnaseq_mapping_file, args.overlap)
+    chrm_dict = read_gene_chromosome(rnaseq_mapping_file)
     for chrm1 in chrs:
         print("Processing Chromosome %s\n" % chrm1)
         bin_dict1 = reverse_dict(newtt, chrm_dict, chrm1)

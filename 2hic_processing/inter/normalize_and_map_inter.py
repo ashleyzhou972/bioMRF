@@ -54,7 +54,7 @@ def mathematical_bin_overlap(left, right, step, threshold):
         
     
     
-def gene_mapping_nodup(ensembl_mapping_file,  threshold):
+def gene_mapping_nodup(rnaseq_mapping_file,  threshold):
     """
     updated 20190421
     for each gene, map it to all the bins that have at least 
@@ -65,31 +65,31 @@ def gene_mapping_nodup(ensembl_mapping_file,  threshold):
     """
     gene_dict = dict()
     #outhandle = open(outfile_Ychr,'w')
-    with open(ensembl_mapping_file,'r') as rna:
+    with open(rnaseq_mapping_file,'r') as rna:
         rna.readline()
         for line in rna:
-            fields = line.strip().split(',')
+            fields = line.strip().split('\t')
             gene = fields[0]
             #print('gene: %s\n' % gene)
-            chrm = fields[1]
+            chrm = fields[2]
             if chrm=='Y':
                 #outhandle.write('%s\n' % gene) 
                 continue
-            start = int(fields[2])
-            end = int(fields[3])
+            start = int(fields[3])
+            end = int(fields[4])
             bins = mathematical_bin_overlap(start, end, step, threshold)
             result_bins = set(bins)
             gene_dict[gene] = result_bins
     #outhandle.close()
     return(gene_dict)
 
-def read_gene_chromosome(ensembl_mapping):
+def read_gene_chromosome(rnaseq_mapping):
     chrm_dict = dict()
-    with open(ensembl_mapping,'r') as r:
+    with open(rnaseq_mapping,'r') as r:
         for line in r:
-            fields = line.strip().split(',')
+            fields = line.strip().split('\t')
             gene = fields[0]
-            chrm = fields[1]
+            chrm = fields[2]
             chrm_dict[gene]=chrm
     return(chrm_dict)
     
@@ -117,18 +117,18 @@ def inter_filter_normalize_and_write_raw(rootfolder, norm_name, resolution, chrm
     bin_dict must match chrm!!!
     each bin is identified by chromosome and left side of bin
     """
-    outfile = open(os.path.join(rootfolder, 'by_gene/norms/','inter_chr%s_chr%s_%s.norm' % (chrm1, chrm2, resolution)),'w')
+    outfile = open(os.path.join(rootfolder, 'norm','inter_chr%s_chr%s_%s.norm' % (chrm1, chrm2, resolution)),'w')
     outfile.write('%s\t%s\t%s\n' % ('gene1', 'gene2', 'inter_norm'))
-    norm_vec1 = rrn.read_normalization_vector(rootfolder, norm_name, resolution, chrm1)
-    norm_vec2 = rrn.read_normalization_vector(rootfolder, norm_name, resolution, chrm2)
-    raw_obs_file = os.path.join(rootfolder,'chr%s_%s_%s.RAWobserved' % (chrm1, chrm2, resolution))
+    norm_vec1 = rrn.read_normalization_vector(os.path.join(rootfolder, 'raw'), norm_name, resolution, chrm1)
+    norm_vec2 = rrn.read_normalization_vector(os.path.join(rootfolder, 'raw'), norm_name, resolution, chrm2)
+    raw_obs_file = os.path.join(rootfolder,'raw', 'chr%s_%s_%s.RAWobserved' % (chrm1, chrm2, resolution))
     with open(raw_obs_file, 'r') as f:
         for line in f:
             fields = line.strip().split()
             left1 = fields[0]
-            bin1 = rrn.bin(left1, chrm1)
+            bin1 = rrn.bin(left1, chrm1, step)
             left2 = fields[1]
-            bin2 = rrn.bin(left2, chrm2)
+            bin2 = rrn.bin(left2, chrm2, step)
             if left1 in bin_dict1.keys() and left2 in bin_dict2.keys():
                 inter = rrn.interaction(bin1, bin2)
                 inter.read(fields[2])
@@ -139,7 +139,6 @@ def inter_filter_normalize_and_write_raw(rootfolder, norm_name, resolution, chrm
                     for gene2 in gene2_set:
                         outfile.write('%s\t%s\t%s\n' % (gene1, gene2, inter_norm))
     outfile.close()
-   
     
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description="Read raw HiC contact matrix and normalize")
@@ -147,28 +146,36 @@ if __name__=='__main__':
     parser.add_argument("coords_file", type = str, help = "File path to the Ensembl file with gene coordinates")
     parser.add_argument("--resolution", dest = 'reso', type=str, help = "Enter resolution, e.g. '10kb' or '250kb'.", default = "10kb")
     parser.add_argument("--overlap", dest = 'overlap', type=float, help="percentage of overlap between a gene and a locus", default = 0.1)
-    parser.add_argument("--norm", dest = 'norm_name', help = "Normalization method", default = "KR", choices=["KR", "VC", "SQRTVC"])
-    
+    parser.add_argument("--norm", dest = 'norm_name', help = "Normalization method", default = "KR", choices=["KR", "VC", "SQRTVC"]) 
     chrs = [str(i) for i in range(1,23)]
     chrs.extend('X')
     
-    parser.add_argument("--chr1", dest = 'chrs1', type = str, help = "Enter the first chromosome in the pair, default is all.", default = chrs, choices=chrs)
-    parser.add_argument("--chr2", dest = 'chrs2', type = str, help = "Enter the second chromosome in the pair, default is all.", default = chrs, choices=chrs)
+    parser.add_argument("--chrA", dest = 'chrsA', type = str, help = "Enter the first chromosome in the pair, default is all.", default = chrs, choices=chrs)
+    parser.add_argument("--chrB", dest = 'chrsB', type = str, help = "Enter the second chromosome in the pair, default is all.", default = chrs, choices=chrs)
     args = parser.parse_args()
-    chrs1 = list(args.chrs1)
-    chrs2 = list(args.chrs2)
+    chrsA = list(args.chrsA)
+    chrsB = list(args.chrsB)
 
     step = convert_resolution_to_step(args.reso)
     
-    ensembl_mapping_file = args.coords_file
-    newtt = gene_mapping_nodup(ensembl_mapping_file, args.overlap)
-    chrm_dict = read_gene_chromosome(ensembl_mapping_file)
-    for chrm1 in chrs1:
-        for chrm2 in chrs2:
+    rnaseq_mapping_file = args.coords_file
+    newtt = gene_mapping_nodup(rnaseq_mapping_file, args.overlap)
+    chrm_dict = read_gene_chromosome(rnaseq_mapping_file)
+    bin_dict_dict = dict()
+    for chrm1 in chrsA:
+        bin_dict1 = reverse_dict(newtt, chrm_dict, chrm1)
+        bin_dict_dict[chrm1] = bin_dict1
+        # Create dictionary for bin_dicts to avoid reading them repeatedly
+        for chrm2 in chrsB:
             if compare_chrms(chrm1, chrm2):
                 print("Processing Chromosome pair %s and %s\n" % (chrm1, chrm2))
-                bin_dict1 = reverse_dict(newtt, chrm_dict, chrm1)
-                inter_filter_normalize_and_write_raw(args.root, args.norm_name, args.reso, chrm1, chrm2, bin_dict1)
+                try:
+                    bin_dict2 = bin_dict_dict[chrm2]
+                except KeyError:
+                    print("bin_dict for %s do not already exist\n" % chrm2)
+                    bin_dict2 = reverse_dict(newtt, chrm_dict, chrm2)
+                    bin_dict_dict[chrm2] = bin_dict2
+                inter_filter_normalize_and_write_raw(args.root, args.norm_name, args.reso, chrm1, chrm2, bin_dict1, bin_dict2)
         
     
 

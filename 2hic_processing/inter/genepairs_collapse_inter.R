@@ -13,11 +13,10 @@ if (length(args)<3) {
 } else if (length(args)==3) {
   chrms = chrs
 } else if (length(args)>3){
-  chrms = c(args[4])
+  chrms = unlist(strsplit(args[4],'_'))
 }
-print(args)
 ###
-setwd(args[1])
+homedir = args[1]
 quant = as.numeric(args[2])
 resolution = args[3]
 ###
@@ -68,9 +67,9 @@ cat("quantile", quant, "\n")
 for (chrm1 in chrms){
   for (chrm2 in chrms){
     if (compare_chromosomes(chrm1, chrm2)){
-      cat("Chromosome1", chrm1, "\n")
-      cat("Chromosome2", chrm2, "\n")
-      data.read<-read.table(file = paste0('./norms/inter_chr', chrm1,'_chr',chrm2,'_',resolution,'.norm'), header=T)
+      cat("ChromosomeA", chrm1, "\n")
+      cat("ChromosomeB", chrm2, "\n")
+      data.read<-read.table(file = paste0(homedir, '/norm/inter_chr', chrm1,'_chr',chrm2,'_',resolution,'.norm'), header=T)
       dt = as.data.table(data.read)
       dt[,pair:=join_gene_pair2(gene1, gene2), by = seq_len(nrow(dt))]
       dt<-dt[,c(4,3)]
@@ -104,7 +103,7 @@ for (chrm1 in chrms){
       cat(sum(direct_min))
       cat("\n")
       newresult = cbind(result, direct_mean, direct_median, direct_max, direct_min)
-      write.table(newresult, file = paste0('./genepairs/inter_chr', chrm1,'_chr', chrm2,'_',resolution,'_quantile', quant,'.genepairs'), quote=F, row.names = F, sep='\t')
+      write.table(newresult, file = paste0(homedir, '/genepairs/inter_chr', chrm1,'_chr', chrm2,'_',resolution,'_quantile', quant,'.genepairs'), quote=F, row.names = F, sep='\t')
 	  }
 	}
 }

@@ -21,15 +21,15 @@ def read_and_sort_genes(rnaseq_file, chrs):
     with open(rnaseq_file,'r') as rf:
         rf.readline()
         for line in rf:
-            fields = line.strip().split(',')
+            fields = line.strip().split('\t')
             gene = fields[0]
             #print('gene: %s\n' % gene)
-            chrm = fields[1]
+            chrm = fields[2]
             if chrm=='Y':
                 #outhandle.write('%s\n' % gene) 
                 continue
-            start = int(fields[2])
-            end = int(fields[3])
+            start = int(fields[3])
+            end = int(fields[4])
             master_dict1[chrm][gene] = (start, end)
             master_dict2[chrm][gene] = start
     sorted_dict = dict()
@@ -67,7 +67,7 @@ if __name__=='__main__':
     
     parser = argparse.ArgumentParser(description="Output gene pairs for linear gene network")
     parser.add_argument("root", type=os.path.abspath, help="Root folder")
-    parser.add_argument("coords_file", type = os.path.abspath, help = "File path to the Ensembl file with gene coordinates")
+    parser.add_argument("coords_file", type = os.path.abspath, help = "File path to the processed RNA-seq file with gene coordinates")
     parser.add_argument("cutoff", type=int, help="Genomic distance cutoff for neighborhood inference. e.g. A cutoff of 10k means genes more than 10k bp apart are not neighbors")
     
     chrs = [str(i) for i in range(1,23)]
@@ -78,5 +78,5 @@ if __name__=='__main__':
     rnaseq_file = args.coords_file
 
     sorted_dict = read_and_sort_genes(rnaseq_file, chrs)
-    print(args.root)
+
     get_gene_pairs(sorted_dict, args.root, args.cutoff)

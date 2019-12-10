@@ -37,7 +37,7 @@ save_y<-function(folder, y, name){
 homedir = args[2]
 genename_folder = args[3]
 output_folder = paste0(homedir, '/data/y/')
-rnaseq_files = args[4]
+rnaseq_files = args[4:length(args)]
 print(rnaseq_files)
 
 chrm_long = args[1]
