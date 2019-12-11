@@ -11,8 +11,10 @@ bash pipeline_hic_intra.sh`
 or 
 
 ```
-bash pipeline_hic_intra.sh`
+bash pipeline_hic_inter.sh`
 ```
+in their respective folders.
+
 
 The following uses **intra** as example.
 

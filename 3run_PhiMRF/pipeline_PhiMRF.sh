@@ -7,11 +7,26 @@ do
 done
 chrms+=("chrmX")
 
-homedir=/home/nzhou/hic/rao2014/GM12878_10kb/intra/
-mkdir $homedir/results/
+#############################################
+# CHANGE THIS!
+homedir=/home/nzhou/hic/rao2014/GM12878_10kb/
+quantile=0.9
+method="mean"
+############################################
 
-#for chrm in "${chrms[@]}"
-for chrm in "chrm1"
+
+mkdir $homedir/intra/results/
+mkdir $homedir/inter/results
+
+
+#for chrmA in "${chrms[@]}"
+for chrmA in "chrm2"
 do
-	Rscript example_PhiMRF.R $homedir "$chrm" 
+	Rscript run_PhiMRF_intra.R $homedir/intra "$chrmA" "$quantile" "$method"
+	Rscript run_PhiMRF_linear.R $homedir/intra "$chrmA" 
+	#for chrmB in "${chrms[@]}"
+	for chrmB in "chrm3"
+	do
+		Rscript run_PhiMRF_inter.R $homedir/inter "$chrmA" "$chrmB" "$quantile" "$method"
+	done
 done

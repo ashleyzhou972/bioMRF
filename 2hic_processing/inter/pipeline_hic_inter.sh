@@ -6,7 +6,6 @@ do
 done
 chrms+=("chrmX")
 
-cellline=GM12878
 resolution=10kb
 
 ### Designate home directory

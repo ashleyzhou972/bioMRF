@@ -6,7 +6,6 @@ do
 done
 chrms+=("chrmX")
 
-cellline=GM12878
 resolution=10kb
 
 
@@ -24,7 +23,7 @@ echo "Current directory is `pwd`"
 ## Step 1 Normalize HiC contacts and map to genes
 # use python3 normalize_and_map_intra.py --help to check usage and change default arguments such as resolution
 echo "Step 1 Normalizing HiC and mapping to genes..."
-python3 normalize_and_map_intra.py $homedir/intra $rnaseq
+python3 normalize_and_map_intra.py $homedir/intra $rnaseq --resolution "$resolution" --overlap 0.1 --norm 'KR
 
 
 ## Step 2 Collapse interaction frequencies by gene pairs using four summary statistics (mean, median, max and min)
