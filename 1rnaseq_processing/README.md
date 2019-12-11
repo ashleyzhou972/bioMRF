@@ -1,6 +1,8 @@
 # Process RNA-seq data
 
-All of the following steps are in [`pipeline_rnaseq.sh`](pipeline_rnaseq.sh). Please read through each step and customize, before running
+All of the following steps are in [`pipeline_rnaseq.sh`](pipeline_rnaseq.sh). 
+
+Please read through each step and customize, before running
 
 `bash pipeline_rnaseq.sh`
 
@@ -43,9 +45,9 @@ Rscript save_gene_names.R $rnaseq  $homedir/rnaseq/gene_names/
 
 This step outputs the RNA-seq count in an R matrix format, each RNA-seq file (replicate) will be one column in the matrix.
 
-Although the gene expression data are the same, we output two set of files, for intra- and inter- chromosomal datasets.
+More than one processed RNA-seq file can be supplied at the same time using wildcards. (NO quotes around the last argument if you are using wildcard)
 
-More than one processed RNA-seq file can be supplied at the same time using wildcards (NO quotes around the last argument if you are using wildcard)
+Although the gene expression data are the same, we output two set of files, for intra- and inter-chromosomal datasets.
 
 ```
 for chrmA in "${chrms[@]}"
