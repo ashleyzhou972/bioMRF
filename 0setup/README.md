@@ -1,6 +1,10 @@
 # Download raw data and set up home folder
 
-All of the following steps are in [`pipeline_setup.sh`](0setup/pipeline_setup.sh). Please read through each step and customize, before running `bash pipeline_setup.sh`.
+All of the following steps are in [`pipeline_setup.sh`](pipeline_setup.sh). Please read through each step and customize, before running 
+
+`bash pipeline_setup.sh`
+
+
 
 ### Designate the cell line and HiC resolution that you want to run PhiMRF on.
 
@@ -42,7 +46,6 @@ mkdir $homedir/intra/linear
 
 ### Download intra-chromosomal HiC data (large file)
 ```
-echo "Step 0 Downloading intra-chromosomal HiC data..."
 wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_"$cellline"_combined_intrachromosomal_contact_matrices.tar.gz -P $homedir/intra/raw
 ```
 You can also download manually from their [GEO repository](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525). Make sure to save the downloaded file in `$homedir/intra/raw`
@@ -60,20 +63,17 @@ norm=KR
 See Supplemental 1 (Extended Experimental Procedure) of [Rao et al 2014 (PMID: 25497547)](https://www.ncbi.nlm.nih.gov/pubmed/25497547) for details.
 
 ```
-echo "Step 0 Extracting intra-chromosomal HiC data"
 tar -xvzf $homedir/intra/raw/GSE63525_"$cellline"_combined_intrachromosomal_contact_matrices.tar.gz -C $homedir/intra/raw/ --strip-components 4 --wildcards GM12878_combined/"$resolution"_resolution_intrachromosomal/chr*/"$filter"/*.{RAWobserved,"$norm"norm}
 ```
 
 ### Download inter-chromosomal HiC data (large file)
 ```
-echo "Step 0 Downloading inter-chromosomal HiC data..."
 wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_"$cellline"_combined_interchromosomal_contact_matrices.tar.gz -P $homedir/inter/raw
 ```
 You can also download manually from their [GEO repository](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525). Make sure to save the downloaded file in `$homedir/inter/raw`
 
 ### Extract inter-chromosomal HiC data (could take a while)
 ```
-echo "Step 0 Extracting inter-chromosomal HiC data..."
 tar -xvzf $homedir/inter/raw/GSE63525_"$cellline"_combined_interchromosomal_contact_matrices.tar.gz -C $homedir/inter/raw/ --strip-components 4 --wildcards GM12878_combined_interchromosomal/"$resolution"_resolution_interchromosomal/chr*_chr*/"$filter"/*.{RAWobserved,"$norm"norm}
 ```
 
@@ -91,17 +91,19 @@ To download another release,
 3. Save the downloaded file as  [`../1rnaseq_processing/ensembl_map_coding.txt`](../1rnaseq_processing/ensembl_map_coding.txt)
 
 
-## Step 2 Download RNAseq data and map to Ensembl gene ID
-# The RNA-seq quantification files are downloaded from ENCODE.
-# Make sure the cell line of your RNAseq file agrees with the cellline for HiC file
-# If you wish to use non-ENCODE RNAseq quantification file, make sure the file follows RSEM's output format:
-# https://www.encodeproject.org/documents/0c78ea4b-9392-421b-a6f3-6c858b6002aa/@@download/attachment/RSEM_Documentation.pdf
-# NOTE that the first column should be gene_id and second column is transcript_id, contrary to the above document.
-# The quantification metric used in this project is the 8th column: posterior_mean_count
-# If you wish to use another COUNT metric, please specify the column index (1-based) in the next pipeline for rnaseq.
+### Download RNAseq data 
 
-# Example for GM12878 (two isogenic replicates)
+The RNA-seq quantification data are downloaded from ENCODE. Make sure the cell line of your RNAseq file agrees with the cellline for HiC file.
+
+If you wish to use non-ENCODE RNAseq quantification file, make sure the file follows [RSEM's output format](https://www.encodeproject.org/documents/0c78ea4b-9392-421b-a6f3-6c858b6002aa/@@download/attachment/RSEM_Documentation.pdf).
+
+**Note**: The first column should be "gene_id" and second column should be "transcript_id", contrary to the above document.
+
+The quantification metric used in this project is the 8th column: "posterior_mean_count"
+
+
+Example for GM12878 (two isogenic replicates):
+```
 wget https://www.encodeproject.org/files/ENCFF781YWT/@@download/ENCFF781YWT.tsv -P $homedir/rnaseq/
 wget https://www.encodeproject.org/files/ENCFF680ZFZ/@@download/ENCFF680ZFZ.tsv -P $homedir/rnaseq/
-
-
+```
