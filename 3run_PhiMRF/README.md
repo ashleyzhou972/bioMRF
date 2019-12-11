@@ -63,11 +63,11 @@ Arguments to edit include:
 
 The R scripts to edit:
 
-    - [`run_PhiMRF_intra.R`](run_PhiMRF_intra.R)
+- [`run_PhiMRF_intra.R`](run_PhiMRF_intra.R)
 
-    - [`run_PhiMRF_linear.R`](run_PhiMRF_linear.R)
+- [`run_PhiMRF_linear.R`](run_PhiMRF_linear.R)
 
-    - [`run_PhiMRF_inter.R`](run_PhiMRF_inter.R)
+- [`run_PhiMRF_inter.R`](run_PhiMRF_inter.R)
 
 3. Each run of PhiMRF for each chromosome (pair) could take minutes to hours, depending on the size of the gene network, and the number of iterations. Please tune the model and allow ample time, before committing to a big loop like the following.
  
