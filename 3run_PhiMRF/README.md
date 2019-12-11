@@ -50,6 +50,7 @@ mkdir $homedir/inter/results
 1. Please read the [vignette](http://htmlpreview.github.io/?https://github.com/ashleyzhou972/PhiMRF/blob/master/vignettes/Introduction-PhiMRF.html) in the [PhiMRF package](https://github.com/ashleyzhou972/PhiMRF)
 
 2. Please edit the R scripts `run_PhiMRF_*.r` according to documentation in PhiMRF.  
+
 Arguments to edit include: 
 
 - number of total iteration of MCMC
@@ -60,11 +61,13 @@ Arguments to edit include:
 
 - etc (see documentation for the function `PhiMRF::pmrf()`)
 
-The R scripts:
+The R scripts to edit:
 
-    * [run_PhiMRF_intra.R](run_PhiMRF_intra.R)
-    * [run_PhiMRF_linear.R](run_PhiMRF_linear.R)
-    * [run_PhiMRF_inter.R](run_PhiMRF_inter.R)
+    - [`run_PhiMRF_intra.R`](run_PhiMRF_intra.R)
+
+    - [`run_PhiMRF_linear.R`](run_PhiMRF_linear.R)
+
+    - [`run_PhiMRF_inter.R`](run_PhiMRF_inter.R)
 
 3. Each run of PhiMRF for each chromosome (pair) could take minutes to hours, depending on the size of the gene network, and the number of iterations. Please tune the model and allow ample time, before committing to a big loop like the following.
  
