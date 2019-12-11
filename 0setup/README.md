@@ -80,24 +80,24 @@ tar -xvzf $homedir/inter/raw/GSE63525_"$cellline"_combined_interchromosomal_cont
 ```
 
 
-### Download Ensembl gene ID and coordinates (optional!)
+### (Optional!) Download Ensembl gene ID and coordinates
 
 Default Ensembl release: 90
 
-This step is optional, only carry out this step if you are using a non-default Ensembl release.
+This step is optional, only carry out this step if you are want to use another Ensembl release.
 
 To download another release, 
 
-1. Go to https://www.ensembl.org/biomart/martview/
+1. Go to [biomart](https://www.ensembl.org/biomart/martview/).
 2. Select "Attributes" on the lefthand column, in the expanded table of "GENE", select "Gene stable ID", "Chromosome/scaffold name", "Gene start (bp)" and "Gene end (bp)"; in the expanded table of "External References", select "NCBI gene ID".
 3. Save the downloaded file as  [`../1rnaseq_processing/ensembl_map_coding.txt`](../1rnaseq_processing/ensembl_map_coding.txt)
 
 
-### Download RNAseq data 
+### Download RNA-seq data 
 
-The RNA-seq quantification data are downloaded from ENCODE. Make sure the cell line of your RNAseq file agrees with the cellline for HiC file.
+The RNA-seq quantification data are downloaded from ENCODE. Make sure the cell line of your RNA-seq file agrees with the cell line of your HiC data.
 
-If you wish to use non-ENCODE RNAseq quantification file, make sure the file follows [RSEM's output format](https://www.encodeproject.org/documents/0c78ea4b-9392-421b-a6f3-6c858b6002aa/@@download/attachment/RSEM_Documentation.pdf).
+If you wish to use non-ENCODE RNA-seq quantification file, make sure the file follows [RSEM's output format](https://www.encodeproject.org/documents/0c78ea4b-9392-421b-a6f3-6c858b6002aa/@@download/attachment/RSEM_Documentation.pdf).
 
 **Note**: The first column should be "gene_id" and second column should be "transcript_id", contrary to the above document.
 

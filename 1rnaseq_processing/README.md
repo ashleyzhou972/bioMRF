@@ -19,13 +19,13 @@ homedir=/home/nzhou/hic/rao2014/GM12878_10kb/
 
 Make sure you have downloaded/prepared your RNA-seq files, according to the [set up](../0setup/) step.
 
-**Replace** the second argument with your ***raw*** RNA-seq filename, wildcards accepted.
+1. Replace the second argument below with your ***raw*** RNA-seq file path, wildcards accepted.
 ```
 python3 prep_rnaseq.py  ./ensembl_map_coding.txt  "$homedir/rnaseq/ENCFF*.tsv"  $homedir/rnaseq/
 ```
-**Supply** the path for the ***processed*** RNA-seq file. Only one of the files is enough.
+2. Supply the path for the ***processed*** RNA-seq file below. Only one of the files is enough.
 
-Naming convention is "rnaseq_[Your raw RNA-seq BASE filename].txt".
+Naming convention for processed files is "rnaseq_[Your raw RNA-seq BASE filename].txt".
 
 Example:
 ```
