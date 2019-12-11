@@ -1,6 +1,8 @@
 # Download raw data and set up home folder
 
-All of the following steps are in [`pipeline_setup.sh`](pipeline_setup.sh). Please read through each step and customize, before running 
+All of the following steps are in [`pipeline_setup.sh`](pipeline_setup.sh). 
+
+Please read through each step and customize, before running 
 
 `bash pipeline_setup.sh`
 
