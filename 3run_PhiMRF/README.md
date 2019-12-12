@@ -69,10 +69,12 @@ The R scripts to edit:
 
 - [`run_PhiMRF_inter.R`](run_PhiMRF_inter.R)
 
-3. Each run of PhiMRF for each chromosome (pair) could take minutes to hours, depending on the size of the gene network, and the number of iterations. Please tune the model and allow ample time, before committing to a big loop like the following.
+3. Each run of PhiMRF for each chromosome (pair) could take minutes to hours, depending on the size of the chromosome (pair), the number of iterations, and your computing power. 
+
+Please tune the model first with a single chromosome (chromosome 1 is the largest), before committing to a big loop as shown below. The following loop goes through all 253 pairs of chromosomes, and is likely going to take days.
  
 
-### Run in loop
+### Run everything in a loop
 ```
 for chrmA in "${chrms[@]}"
 do

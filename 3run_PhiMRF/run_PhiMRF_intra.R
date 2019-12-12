@@ -15,9 +15,9 @@ method = args[4]
 
 #########################################################
 # CHANGE THESE!
-Ti = 20 # total iteration
+Ti = 5000 # total iteration
 vars = c(1, 0.5, NA, 2) # variance for w, alpha, eta and tau2
-B = 5 # burn in
+B = 1000 # burn in
 ########################################################
 
 

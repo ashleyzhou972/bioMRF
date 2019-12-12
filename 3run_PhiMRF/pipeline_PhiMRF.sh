@@ -19,13 +19,13 @@ mkdir $homedir/intra/results/
 mkdir $homedir/inter/results
 
 
-#for chrmA in "${chrms[@]}"
-for chrmA in "chrm2"
+for chrmA in "${chrms[@]}"
+#for chrmA in "chrm2"
 do
 	Rscript run_PhiMRF_intra.R $homedir/intra "$chrmA" "$quantile" "$method"
 	Rscript run_PhiMRF_linear.R $homedir/intra "$chrmA" 
-	#for chrmB in "${chrms[@]}"
-	for chrmB in "chrm3"
+	for chrmB in "${chrms[@]}"
+	#for chrmB in "chrm3"
 	do
 		Rscript run_PhiMRF_inter.R $homedir/inter "$chrmA" "$chrmB" "$quantile" "$method"
 	done
