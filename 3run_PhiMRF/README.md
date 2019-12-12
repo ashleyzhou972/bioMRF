@@ -49,7 +49,7 @@ mkdir $homedir/inter/results
 
 1. Please read the [vignette](http://htmlpreview.github.io/?https://github.com/ashleyzhou972/PhiMRF/blob/master/vignettes/Introduction-PhiMRF.html) in the [PhiMRF package](https://github.com/ashleyzhou972/PhiMRF)
 
-2. Please edit the R scripts `run_PhiMRF_*.r` according to documentation in PhiMRF.  
+2. Please edit the R scripts `run_PhiMRF_*.R` according to the documentation in PhiMRF.  
 
 Arguments to edit include: 
 
@@ -58,6 +58,8 @@ Arguments to edit include:
 - number of burn-in iterations
 
 - variance of random walk chains
+
+- Parameters for uniform distributions
 
 - etc (see documentation for the function `PhiMRF::pmrf()`)
 
