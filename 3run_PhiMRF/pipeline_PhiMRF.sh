@@ -22,11 +22,14 @@ mkdir $homedir/inter/results
 for chrmA in "${chrms[@]}"
 #for chrmA in "chrm2"
 do
+	echo "Beginning intra" "$chrmA"
 	Rscript run_PhiMRF_intra.R $homedir/intra "$chrmA" "$quantile" "$method"
+	echo "Beginning linear" "$chrmA"
 	Rscript run_PhiMRF_linear.R $homedir/intra "$chrmA" 
 	for chrmB in "${chrms[@]}"
 	#for chrmB in "chrm3"
 	do
+		echo "Beginning inter" "$chrmA" "$chrmB"
 		Rscript run_PhiMRF_inter.R $homedir/inter "$chrmA" "$chrmB" "$quantile" "$method"
 	done
 done

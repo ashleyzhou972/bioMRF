@@ -13,7 +13,7 @@ The R package [PhiMRF](https://github.com/ashleyzhou972/PhiMRF) is the statistic
 - R
 - bash
 
-### This pipeline has four parts:
+### This pipeline has four main parts:
 
 - [Set up](0setup/)
 
@@ -21,15 +21,22 @@ The R package [PhiMRF](https://github.com/ashleyzhou972/PhiMRF) is the statistic
 
 - [Processing HiC data](2hic_processing/)
 
-- [Running PhiMRF](3run_PhiMRF/)
+- [Running PhiMRF](3run_PhiMRF/)j
 
 The four parts are explained in their separate folders, and should be run sequentially.
 
-All intermediate results from each step of this pipeline are available on figshare, for the following celllines.
 
-- **IMR90** in **10kb resolution**
+### This repo also contains code to process sub-groups in a genome
 
-- **GM12878** in **10kb resolution**
+- [TAD genes](TADs): genes located within Topologically Associating Domains, as well as neighbors isolated by TADs. 
+
+- [functional genes](functional): genes annotated with certain Gene Ontology term.
+
+
+All intermediate results from each step of this pipeline are available on figshare, for the following cell line.
+
+- [**IMR90** in **10kb resolution**](https://doi.org/10.6084/m9.figshare.11357321.v1)
+
 
 ### References
 
