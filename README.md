@@ -33,7 +33,7 @@ The four parts are explained in their separate folders, and should be run sequen
 - [functional genes](functional): genes annotated with certain Gene Ontology term.
 
 
-All intermediate results from each step of this pipeline are available on figshare, for the following cell line.
+### All intermediate results from each step of this pipeline are available on figshare:
 
 - [**IMR90** in **10kb resolution**](https://doi.org/10.6084/m9.figshare.11357321.v1)
 
