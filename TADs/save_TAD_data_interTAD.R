@@ -1,21 +1,27 @@
 rm(list=ls())
-source('/home/nzhou/hic/IMR90/work/MRF_HIC_GE/analysis/change_neighbor_mat.R')
-datafolder = '/home/nzhou/hic/rao2014/IMR90_10kb/intra/by_gene/data/'
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)<3) {
+  stop("Three arguments must be supplied\n", call.=FALSE)
+} 
+source('./__subset_mat.R')
+
 chrms = as.character(seq(1,22,1))
 chrms = c(chrms, 'X')
-#chrms = c("1")
+
+TADfolder = args[1]
+allTAD_data_folder = args[2] # data path for full chromosomes gene networks
+outfolder = args[3]
 
 #TADs: inter-only
 # TAD genes with interTAD edges only
 # the adjacency matrix is simply the element-wise difference 
 # between the original TADs matrix and the intraTAD matrix
 # need to align the order of the genes!!!
-outputfolder = "/home/nzhou/hic/rao2014/IMR90_10kb/intra/by_gene/TAD_inter_data/"
 for (chrm in chrms){
   chrm_long = paste0("chrm", chrm)
-  allTAD = readRDS(paste0(datafolder, "../TAD_data/TADs_", chrm_long, "_neighbors_trans.rds"))
+  allTAD = readRDS(paste0(allTAD_data_folder, "/TADs_all_", chrm_long, "_neighbors_trans.rds"))
   gene_names_all = colnames(allTAD)
-  intraTAD = readRDS(paste0(datafolder, "../TAD_intra_data/TADs_intra_", chrm_long, "_neighbors_trans.rds"))
+  intraTAD = readRDS(paste0(allTAD_data_folder, "../TADs_intra_data/TADs_intra_", chrm_long, "_neighbors_trans.rds"))
   gene_names_intra = colnames(intraTAD)
   #### re-order the intraTAD matrix according to the order of the allTAD matrix
   order = match(gene_names_all, gene_names_intra)
@@ -40,10 +46,10 @@ for (chrm in chrms){
   }
   
   # Read in y from intraTAD and check for colnames before save as interTAD
-  y = readRDS(file = paste0(outputfolder, "../TAD_data/y/", paste0("TADs_", chrm_long), "_y.rds"))
+  y = readRDS(file = paste0(allTAD_data_folder, "/y/", paste0("TADs_all_", chrm_long), "_y.rds"))
   if (sum(rownames(y)!=colnames(interTAD_trans))>0){
     stop("Gene names for y and interTAD do not agree\n")
   }
-  saveRDS(interTAD_trans, file = paste0(outputfolder, "/", paste0("TADs_inter_", chrm_long), "_neighbors_trans.rds"))
-  saveRDS(y, file = paste0(outputfolder, "/y/", paste0("TADs_inter_", chrm_long), "_y.rds"))
+  saveRDS(interTAD_trans, file = paste0(outfolder, "/", paste0("TADs_inter_", chrm_long), "_neighbors_trans.rds"))
+  saveRDS(y, file = paste0(outfolder, "/y/", paste0("TADs_inter_", chrm_long), "_y.rds"))
 }

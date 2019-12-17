@@ -12,6 +12,7 @@ TADs are intra-chromosomal structures!
 
 import os
 import sys
+import argparse
 
 
 
@@ -87,12 +88,25 @@ def gene_mapping(rnaseq_file, domain_list, chrm):
             
             
 if __name__=='__main__':
-    chrms = [str(i) for i in range(1,23)]
-    chrms.append('X')
-    rnaseq_file = '/home/nzhou/hic/rao2014/rnaseq/rnaseq_corrected.txt'
-    outfolder = '/home/nzhou/hic/rao2014/IMR90_10kb/hiccups/TADs/TADgenes/'
-    for chrm in chrms:
-        domain_list=read_domainlist('/home/nzhou/hic/rao2014/IMR90_10kb/hiccups/TADs/GSE63525_IMR90_Arrowhead_domainlist.txt',chrm)
+    
+    parser = argparse.ArgumentParser(description="Read arrowhead TAD list and output whether genes are in TADs or not")
+    
+    parser.add_argument("domain_list_file", type=str, help = "File path to domain list")
+    parser.add_argument("rnaseq_file", type = str, help = "File path to the RNAseq file with gene coordinates")
+    parser.add_argument("outfolder", type=str, help="Path to output folder")
+    
+    chrs = [str(i) for i in range(1,23)]
+    chrs.extend('X')
+    
+    parser.add_argument("--chr", dest = 'chrs', type = str, help = "Enter the chromosome, default is all.", default = chrs, choices=chrs)
+    args = parser.parse_args()
+    chrs = list(args.chrs)
+
+    
+    rnaseq_file = args.rnaseq_file
+    outfolder = args.outfolder
+    for chrm in chrs:
+        domain_list=read_domainlist(args.domain_list_file,chrm)
         print("Number of TAD in chrm %s: %s" % (chrm, len(domain_list)))
         tad_genes, nontad_genes = gene_mapping(rnaseq_file, domain_list, chrm)
         print("Number of genes per TAD in chrm %s: %s\n" % (chrm, len(tad_genes)/len(domain_list)))

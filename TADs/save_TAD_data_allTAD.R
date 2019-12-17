@@ -1,18 +1,22 @@
 rm(list=ls())
-source('/home/nzhou/hic/IMR90/work/MRF_HIC_GE/analysis/change_neighbor_mat.R')
-datafolder = '/home/nzhou/hic/rao2014/IMR90_10kb/intra/by_gene/data/'
-#chrms = as.character(seq(1,22,1))
-#chrms = c(chrms, 'X')
-chrms = c("1")
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)<3) {
+  stop("Three arguments must be supplied\n", call.=FALSE)
+} 
+source('./__subset_mat.R')
 
-#TADs
-TADfolder = '/home/nzhou/hic/rao2014/IMR90_10kb/hiccups/TADs/TADgenes/'
+chrms = as.character(seq(1,22,1))
+chrms = c(chrms, 'X')
+
+TADfolder = args[1]
+by_chrm_data_folder = args[2] # data path for full chromosomes gene networks
+outfolder = args[3]
+
+
 for (chrm in chrms){
   chrm_long = paste0("chrm", chrm)
   key = paste0(chrm_long, '_0.9_mean_TRUE_FALSE')
   TADgenes = read.table(paste0(TADfolder, '/', chrm_long, '_TAD.txt'), header = F)[,1]
-  ret = subset_mat(datafolder, key, chrm_long, TRUE, TADgenes, 
-                   "/home/nzhou/hic/rao2014/IMR90_10kb/intra/by_gene/TAD_data/temp/", 
-                   paste0("TADs_", chrm_long) , paste0("TADs_", chrm_long))
-  
+  ret = subset_mat(by_chrm_data_folder, key, chrm_long, TRUE, TADgenes, 
+                   outfolder, paste0("TADs_all_", chrm_long) , paste0("TADs_all_", chrm_long))
 }

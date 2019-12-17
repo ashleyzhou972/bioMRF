@@ -1,18 +1,24 @@
 rm(list=ls())
-source('/home/nzhou/hic/IMR90/work/MRF_HIC_GE/analysis/change_neighbor_mat.R')
-datafolder = '/home/nzhou/hic/rao2014/IMR90_10kb/intra/by_gene/data/'
-#chrms = as.character(seq(1,22,1))
-#chrms = c(chrms, 'X')
-chrms = c("1")
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)<3) {
+  stop("Three arguments must be supplied\n", call.=FALSE)
+} 
+source('./__subset_mat.R')
+
+chrms = as.character(seq(1,22,1))
+chrms = c(chrms, 'X')
+
+TADfolder = args[1]
+by_chrm_data_folder = args[2] # data path for full chromosomes gene networks
+outfolder = args[3]
 
 
 #TADs: intra-only
-TADfolder = '/home/nzhou/hic/rao2014/IMR90_10kb/hiccups/TADs/TADgenes/'
+
 get_dimname_1<-function(matrix){
   return(attributes(matrix)$Dimnames[[1]])
 }
-#chrm = '1'
-outputfolder = "/home/nzhou/hic/rao2014/IMR90_10kb/intra/by_gene/TAD_intra_data/"
+
 for (chrm in chrms){
   TAD_mats = list()
   TAD_y = c()
@@ -32,7 +38,7 @@ for (chrm in chrms){
   for (group in gene_domains[,2]){ 
     vec = unlist(strsplit(group, split="--", fixed=T))
     #print(vec)
-    ret = subset_mat(datafolder, key, chrm_long, TRUE, vec, NULL, NULL, NULL )
+    ret = subset_mat(by_chrm_data_folder, key, chrm_long, TRUE, vec, NULL, NULL, NULL )
     #sub_net = induced_subgraph(TADsub, vec)
     #TADsub_intra = union(TADsub_intra, sub_net)
     TAD_mats = c(TAD_mats, ret$net)
@@ -52,6 +58,6 @@ for (chrm in chrms){
     stop("Gene names of resulting matrix not the same as y\n")
   }
   #save
-  saveRDS(big, file = paste0(outputfolder, "/", paste0("TADs_intra_", chrm_long), "_neighbors_trans.rds"))
-  saveRDS(TAD_y, file = paste0(outputfolder, "/y/", paste0("TADs_intra_", chrm_long), "_y.rds"))
+  saveRDS(big, file = paste0(outfolder, "/", paste0("TADs_intra_", chrm_long), "_neighbors_trans.rds"))
+  saveRDS(TAD_y, file = paste0(outfolder, "/y/", paste0("TADs_intra_", chrm_long), "_y.rds"))
 }

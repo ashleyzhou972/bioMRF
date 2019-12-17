@@ -21,7 +21,7 @@ The R package [PhiMRF](https://github.com/ashleyzhou972/PhiMRF) is the statistic
 
 - [Processing HiC data](2hic_processing/)
 
-- [Running PhiMRF](3run_PhiMRF/)j
+- [Running PhiMRF](3run_PhiMRF/)
 
 The four parts are explained in their separate folders, and should be run sequentially.
 
