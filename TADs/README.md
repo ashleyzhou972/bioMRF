@@ -5,7 +5,7 @@ All of the following steps are in [`pipeline_TADs.sh`](pipeline_TADs.sh)
 Please read through each step and customize, before running
 
 ```
-bash pipeline_TADs.sh`
+bash pipeline_TADs.sh
 ```
 
 ### Designate home dirctory
@@ -37,8 +37,10 @@ cellline=IMR90
 ```
 
 ### Step 0 set up
-#mkdir $homedir/TADs
-#mkdir $homedir/TADs/TADgenes
+
+```
+mkdir $homedir/TADs
+mkdir $homedir/TADs/TADgenes
 mkdir $homedir/TADs/TADs_all_data
 mkdir $homedir/TADs/TADs_all_data/y
 mkdir $homedir/TADs/TADs_non_data
@@ -47,6 +49,7 @@ mkdir $homedir/TADs/TADs_intra_data
 mkdir $homedir/TADs/TADs_intra_data/y
 mkdir $homedir/TADs/TADs_inter_data
 mkdir $homedir/TADs/TADs_inter_data/y
+```
 
 ### Step 1 download domain list
 
@@ -87,7 +90,7 @@ Rscript save_TAD_data_nonTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $home
 Rscript save_TAD_data_intraTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_intra_data/
 ```
 
-The following step requires the TADs_all_data and TADs_intra_data folders to be filled, as described above (Step 3.1 and 3.3)
+The following step requires the `TADs_all_data` and `TADs_intra_data` folders to be filled, as described above (Step 3.1 and 3.3)
 
 Note the change in the second argument 
 ```
