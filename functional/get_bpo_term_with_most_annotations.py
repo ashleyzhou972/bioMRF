@@ -4,12 +4,11 @@
 Created on Mon Sep 30 16:12:59 2019
 
 @author: Naihui Zhou (nzhou@iastate.edu)
-@last updated 20191002
+@last updated 20191217
 """
 import heapq
 import os
 import gzip
-os.chdir("/home/nzhou/hic/rao2014/script/goa/")
 from Ontology.IO import OboIO
 import Bio.UniProt.GOA as GOA
 import argparse
@@ -156,7 +155,6 @@ def read_tab_propogate(tab_file, ancestor_files, go_object, aspect, root_terms):
     anceDict = dict()
     for anc_file in ancestor_files:
         anceDict = {**readAncestor(anc_file), **anceDict}
-    print(len(anceDict))
     with open(tab_file, 'r') as tab:
         for line in tab:
             prot, go = line.strip().split('\t')
@@ -232,11 +230,11 @@ def get_ensembl_genes(go_term_list, goa_dict, ensembl_mapped_dict):
         for prot in goa_dict[go_term]:
             try:
                 genes = ensembl_mapped_dict[prot]
+                ensembl = ensembl.union(genes)
             except KeyError:
                 #print("Protein %s not mapped to genes\n" % prot)
                 #This should be a common occurence so can suppress warning print
                 pass
-            ensembl = ensembl.union(genes)
         ret_dict[go_term] = ensembl
     return(ret_dict)
     
@@ -256,44 +254,51 @@ if __name__=="__main__":
     parser.add_argument('--propagate', dest='propogate', action='store_true')
     parser.add_argument('--no-propagate', dest='propogate', action='store_false')
     parser.add_argument("N", help="choose the top N most used GO terms", type=int)
+    parser.add_argument("datafolder",type = str, help="Path to folder where input and output data are saved\n")
+    parser.add_argument("genename_folder",type = str, help="Path to gene name folder\n")
     args = parser.parse_args()
     
     
-    datafolder = "/home/nzhou/hic/rao2014/IMR90_10kb/allBP"
-    obo_file = os.path.join(datafolder, "go_20190701.obo")
+    exclude_direct_children_of_root = False
+
+    datafolder = args.datafolder
+    obo_file = os.path.join(datafolder, "go.obo")
     obo_parser = OboIO.OboReader(open(obo_file,'r'))
     go_object = obo_parser.read()
     
     #c_bpo, c_cco, c_mfo = go_ontology_ancestors_split_write(obo_file)
     
-    #gaf_file = os.path.join(datafolder, "goa_human_20190916.gaf")
+    #gaf_file = os.path.join(datafolder, "goa_human.gaf")
     #c_nomfo = read_gaf_write_tab(gaf_file, False, os.path.join(datafolder, "goa_human_bpo.tab"))
     #c_mfo = read_gaf_write_tab(gaf_file, True, os.path.join(datafolder, "goa_human_bpo_mfo.tab"))
 
 
     ##map Uniprot proteins to ensembl genes
-    ensembl_file = os.path.join(datafolder, '../../gene_names/all_gene_names.txt')
-    ## We use the mapping file from the Ensembl 96 release 
+    ensembl_file = os.path.join(args.genename_folder, 'all_gene_names.txt')
+    ## We use the mapping file from the Ensembl 90 release 
     ## Because some of our genes are obsolete in the newer version!!
-    mapping_file = os.path.join(datafolder, './Homo_sapiens.GRCh38.96.uniprot.tsv.gz')
+    mapping_file = os.path.join(datafolder, 'Ensembl_uniprot.tsv.gz')
     notmapped_set, mapped_dict = filter_genes(mapping_file, ensembl_file)
     
     
-    ## List of terms excluded (due to being to general)    
+    ## List of terms excluded (due to being too general)    
     root_terms = set(['GO:0008150', 'GO:0005575','GO:0003674'])
-    direct_children = read_children(os.path.join(datafolder, 'direct_children_of_bpo.tab'))
-    to_exclude = root_terms.union(direct_children)
+    if exclude_direct_children_of_root:
+        direct_children = read_children(os.path.join(datafolder, 'direct_children_of_bpo.tab'))
+        to_exclude = root_terms.union(direct_children)
+    else:
+        to_exclude = root_terms
     
 
     ## bpo no prop
     if args.propogate:
         tab_file_mfo_bpo = os.path.join(datafolder, "goa_human_bpo_mfo.tab")
-        ancestor_file_bpo = os.path.join(datafolder, "go_20190701_ancestors_bpo.txt")
-        ancestor_file_mfo = os.path.join(datafolder, "go_20190701_ancestors_mfo.txt")
+        ancestor_file_bpo = os.path.join(datafolder, "go_ancestors_bpo.txt")
+        ancestor_file_mfo = os.path.join(datafolder, "go_ancestors_mfo.txt")
         anno = read_tab_propogate(tab_file_mfo_bpo, [ancestor_file_bpo, ancestor_file_mfo], go_object, 'P', to_exclude)
     else:
         tab_file_bpo = os.path.join(datafolder, "goa_human_bpo.tab")
-        ancestor_file_bpo = os.path.join(datafolder, "go_20190701_ancestors_bpo.txt")
+        ancestor_file_bpo = os.path.join(datafolder, "go_ancestors_bpo.txt")
         anno = read_tab_no_propogate(tab_file_bpo, ancestor_file_bpo, go_object, 'P', to_exclude)
     ## output the n terms annotating the most proteins
     N = args.N
@@ -302,14 +307,18 @@ if __name__=="__main__":
     
     
     ## Output the ensembl genes associated with each of the N GO terms
+    ensembl_list_dir = os.path.join(datafolder, "ensembl_list")
+    if not os.path.exists(ensembl_list_dir):
+        os.makedirs(ensembl_list_dir)
     output = get_ensembl_genes(query_terms, anno, mapped_dict)
     for goterm in output:
-        with open(os.path.join(datafolder, "/ensembl_list/",%s_%s_genes_ensembl.txt" % (goterm, args.propogate) ), 'w') as out:
+        with open(os.path.join(datafolder, "ensembl_list", "%s_%s_genes_ensembl.txt" % (goterm, args.propogate)), 'w') as out:
             for ensembl in output[goterm]:
                 out.write("%s\n" % ensembl)
                 
                 
     ## write an outfile of all the top N GO terms and their prot count and gene
+
     with open(os.path.join(datafolder, "Top%d_GO_terms_counts_%s" % (N, args.propogate)),"w") as out_count:
         for term in get_top_terms(anno, N):
             out_count.write("%s\t%s\t%s\t%s\n" % (term[1], query_names[term[1]], term[0], len(output[term[1]])))
