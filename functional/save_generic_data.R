@@ -1,9 +1,10 @@
 rm(list = ls())
 args = commandArgs(trailingOnly=TRUE)
-if (length(args)==0) {
-  stop("At least one argument must be supplied\n", call.=FALSE)
-} else if (length(args)==1) {
+if (length(args)<2) {
+  stop("At least two argument must be supplied\n", call.=FALSE)
+} else if (length(args)==2) {
   key = args[1]
+  homefolder = args[2]
 }
 #key = "GO:0007165_False"
 #anno = read.table(paste0('./', key,'.tsv'), sep = "\t", header = T)
@@ -11,16 +12,16 @@ if (length(args)==0) {
 #write.table(signal_genes, paste0("./",key,"_genes_uniprot.txt"), row.names = F, col.names = F, quote=F)
 #### use online mapping tool on uniprot.org
 
-source('/home/nzhou/hic/IMR90/work/MRF_HIC_GE/analysis/change_neighbor_mat.R')
-datafolder = '/home/nzhou/hic/rao2014/IMR90_10kb/inter/by_gene/all_data/'
-signalFolder = paste0('/home/nzhou/hic/rao2014/IMR90_10kb/allBP/ensembl_list/')
+source('../TADs/__subset_mat.R')
+datafolder = paste0(homefolder, "/functional/data/")
+signalFolder = paste0(homefolder, "functional/annotations/ensembl_list/")
 ##read signal genes
 
 signal_genes = as.character(read.table(paste0(signalFolder, '/', key,'_genes_ensembl.txt'), header = T)[,1] )
 
 key_all = "ALL"
-savefolder = "/home/nzhou/hic/rao2014/IMR90_10kb/inter/by_gene/functional_data/"
-savepath = paste0(savefolder, key,"_data/")
+savefolder = datafolder
+savepath = paste0(savefolder, key, "_data/")
 if (!dir.exists(savepath)){
   dir.create(savepath, showWarnings = T)
   dir.create(paste0(savepath, '/y/'), showWarnings=T)

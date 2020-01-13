@@ -55,8 +55,8 @@ mkdir $homedir/TADs/TADs_inter_data/y
 
 Here we used the TADs called by the Arrowhead caller([Rao et al 2014](https://www.ncbi.nlm.nih.gov/pubmed/25497547)), downloaded from [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525) (See Pages S50-S51 in the Supplemental 1 (Extended Experimental Procedure) of [Rao et al 2014](https://www.ncbi.nlm.nih.gov/pubmed/25497547) for how Arrowhead works).
 
-A number of other TAD callers are available and may output different results. See [Forcatto et al 2017](https://www.ncbi.nlm.nih.gov/pubmed/28604721)for a summary of other available TAD callers.
-echo "Step 1 Download TAD list..."
+A number of other TAD callers are available and may output different results. See [Forcatto et al 2017](https://www.ncbi.nlm.nih.gov/pubmed/28604721) for a summary of other available TAD callers.
+
 ```
 wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz -P $homedir/TADs
 gunzip $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz
@@ -90,9 +90,9 @@ Rscript save_TAD_data_nonTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $home
 Rscript save_TAD_data_intraTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_intra_data/
 ```
 
-The following step requires the `TADs_all_data` and `TADs_intra_data` folders to be filled, as described above (Step 3.1 and 3.3)
+The following step requires the `$homedir/TADs/TADs_all_data` and `$homedir/TADs/TADs_intra_data` folders to be filled, as described above.
 
-Note the change in the second argument 
+Note the change in the second argument below.
 ```
 Rscript save_TAD_data_interTAD.R $homedir/TADs/TADgenes $homedir/TADs/TADs_all_data/ $homedir/TADs/TADs_inter_data/
 ```

@@ -109,3 +109,5 @@ Example for GM12878 (two isogenic replicates):
 wget https://www.encodeproject.org/files/ENCFF781YWT/@@download/ENCFF781YWT.tsv -P $homedir/rnaseq/
 wget https://www.encodeproject.org/files/ENCFF680ZFZ/@@download/ENCFF680ZFZ.tsv -P $homedir/rnaseq/
 ```
+
+### Go to the [next step](../1rnaseq_processing)

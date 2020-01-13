@@ -59,3 +59,5 @@ do
 	done
 done
 ```
+
+### Go to the [next step](../2hic_processing)

@@ -12,6 +12,7 @@ mkdir $homedir/functional
 mkdir $homedir/functional/data
 mkdir $homedir/functional/data/y
 mkdir $homedir/functional/annotations
+mkdir $homedir/functional/info
 
 ### Step 1 download Gene Ontology Annotations
 echo "Step 1.1 Download go.obo..."
@@ -50,10 +51,29 @@ releasenum=90
 # - propagate the annotations through the GO hierarchy (including MFO terms)
 # - exclude direct children of root terms
 
-echo "Step 2 Get the BPO terms with the most annotations..."
-python3 get_bpo_term_with_most_annotations.py --no-propagate 20 $homedir/functional/annotations/  $homedir/rnaseq/gene_names/
+echo "Step 2 Get BPO terms with the most annotations..."
+prop="False"
+N=20
+#python3 get_bpo_term_with_most_annotations.py --no-propagate $N $homedir/functional/annotations/  $homedir/rnaseq/gene_names/
+arr=()
+while IFS= read -r line || [[ "$line" ]]; 
+do 
+	term="$(cut -f1 <<<"$line")"
+	echo $term
+	arr+=("$term")
+done < ./Top"$N"_GO_terms_counts_"$prop"
 
-### Step 3 Aggregate all intra- and inter-chromosomal adjacency matrices
+### Step 3 Aggregate all intra- and inter-chromosomal adjacency matrices (This could take a while...)
+echo "Step3 3 Aggregate all intra- and inter- adjacency matrices..."
+#Rscript combine_nets.R $homedir
 
 ### Step 4 Output data for subsets of genes for each GO term
+echo "Step 4 Save data for PhiMRF for each GO term..."
 
+#use the array saved in Step 2
+for GO in "${arr[@]}"
+do
+	key="${GO}_${prop}"
+	echo $key
+	Rscript save_generic_data.R  $key >$homedir/functional/info/out_"$key".info
+done

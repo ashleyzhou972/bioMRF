@@ -25,63 +25,98 @@ Example:
 rnaseq=$homedir/rnaseq/rnaseq_ENCFF781YWT.txt
 ```
 
+### Supply the obo file name
+Example:
+```
+oboname=go.obo.gz
+```
+
 ### Step 0 set up
 
 ```
-mkdir $homedir/TADs
-mkdir $homedir/TADs/TADgenes
-mkdir $homedir/TADs/TADs_all_data
-mkdir $homedir/TADs/TADs_all_data/y
-mkdir $homedir/TADs/TADs_non_data
-mkdir $homedir/TADs/TADs_non_data/y
-mkdir $homedir/TADs/TADs_intra_data
-mkdir $homedir/TADs/TADs_intra_data/y
-mkdir $homedir/TADs/TADs_inter_data
-mkdir $homedir/TADs/TADs_inter_data/y
+mkdir $homedir/functional
+mkdir $homedir/functional/data
+mkdir $homedir/functional/data/y
+mkdir $homedir/functional/annotations
+mkdir $homedir/functional/info
 ```
 
-### Step 1 download domain list
-
-Here we used the TADs called by the Arrowhead caller([Rao et al 2014](https://www.ncbi.nlm.nih.gov/pubmed/25497547)), downloaded from [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525) (See Pages S50-S51 in the Supplemental 1 (Extended Experimental Procedure) of [Rao et al 2014](https://www.ncbi.nlm.nih.gov/pubmed/25497547) for how Arrowhead works).
-
-A number of other TAD callers are available and may output different results. See [Forcatto et al 2017](https://www.ncbi.nlm.nih.gov/pubmed/28604721) for a summary of other available TAD callers.
-
+### Step 1 download Gene Ontology Annotations
+1. Download obo file
+See [Gene Ontology Consortium](ftp://ftp.geneontology.org/go/www/GO.format.obo-1_2.shtml) for details of the obo format
+To download the release used in the paper (20190701):
 ```
-wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz -P $homedir/TADs
-gunzip $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz
+wget ftp://ftp.geneontology.org/go/ontology-archive//gene_ontology_edit.obo.2019-07-01.gz -O $homedir/functional/annotations/$oboname
 ```
-
-
-### Step 2 Map genes to TADs
-
+To download the most release:
 ```
-python3 map_ensembl_genes_tad.py $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt $rnaseq $homedir/TADs/TADgenes
-```
-optionally, you can specify only one chromosome, `python3 map_ensembl_genes_tad.py $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt $rnaseq $homedir/TADs/TADgenes --chr 13`.
-
-
-### Step 3 Save gene networks for TAD genes
-
-Four categories:
-
-  - TADs_all_data: all TAD genes, all edges
-  - TADs_non_data: all nonTAD genes, all edges
-  - TADs_intra_data: all TAD genes, only intra-TAD edges (edges that connect two genes in the same TAD)
-  - TADs_inter_data: all TAD genes, only inter-TAD edges (edges that connect two genes not in the same TAD, still in the same chromosome)
-
-Note that the following 3 step requires the processed adjacency matrices from the full intra-chromosomal networks.
-
-Please check the `$homedir/intra/data` folder to make sure it is non-empty and has by-chromosome adjacency matrices and y's.
-
-```
-Rscript save_TAD_data_allTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_all_data/
-Rscript save_TAD_data_nonTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_non_data/
-Rscript save_TAD_data_intraTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_intra_data/
+wget http://purl.obolibrary.org/obo/go.obo -O $homedir/functional/annotations/$oboname
 ```
 
-The following step requires the `$homedir/TADs/TADs_all_data` and `$homedir/TADs/TADs_intra_data` folders to be filled, as described above.
-
-Note the change in the second argument below.
+2. Unzip go.obo
 ```
-Rscript save_TAD_data_interTAD.R $homedir/TADs/TADgenes $homedir/TADs/TADs_all_data/ $homedir/TADs/TADs_inter_data/
+gunzip $homedir/functional/annotations/$oboname
+```
+
+3. Download GOA
+To download the release used in the paper (20190916):
+```
+wget ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/old//HUMAN/goa_human.gaf.194.gz -O $homedir/functional/annotations/goa_human.gaf.gz
+```
+To download the most recent release:
+```
+wget ftp://ftp.ebi.ac.uk/pub/databases/GO/goa//HUMAN/goa_human.gaf.gz -P $homedir/functional/annotations/goa_human.gaf.gz
+```
+
+4. Unzip gaf file
+```
+gunzip $homedir/functional/annotations/goa_human.gaf.gz
+```
+5. Download mapping between uniprot and Ensembl
+Note you can change which Ensembl release to use
+```
+releasenum=90
+wget ftp://ftp.ensembl.org/pub/release-"$releasenum"/tsv/homo_sapiens//Homo_sapiens.GRCh38."$releasenum".uniprot.tsv.gz -O $homedir/functional/annotations/Ensembl_uniprot.tsv.gz
+```
+
+### Step 2 Get the most annotated proteins (genes) in Biological Process Ontology (Optional!) 
+This step is optional, the list of top 20 GO terms is already provided as `Top20_GO_terms_counts_False` (unpropagated) and `Top20_GO_terms_counts_True` (propagated) in this directory
+List of Ensembl gene names annotated with each GO term is also already provided as the `ensmebl_list` folder in this directory
+Below code outputs the same files as above, but in the $homedir directory
+
+Check usage to see options to 
+ - Output the top N GO terms
+ - propagate the annotations through the GO hierarchy (including MFO terms)
+ - exclude direct children of root terms
+
+```
+prop="False"
+N=20
+python3 get_bpo_term_with_most_annotations.py --no-propagate $N $homedir/functional/annotations/  $homedir/rnaseq/gene_names/
+arr=()
+
+while IFS= read -r line || [[ "$line" ]]; 
+do 
+	term="$(cut -f1 <<<"$line")"
+	echo $term
+	arr+=("$term")
+done < ./Top"$N"_GO_terms_counts_"$prop"
+
+```
+
+### Step 3 Aggregate all intra- and inter-chromosomal adjacency matrices
+
+This could take a while...
+```
+Rscript combine_nets.R $homedir
+```
+
+### Step 4 Output data for subsets of genes for each GO term
+```
+for GO in "${arr[@]}"
+do
+	key="${GO}_${prop}"
+	echo $key
+	Rscript save_generic_data.R  $key >$homedir/functional/info/out_"$key".info
+done
 ```

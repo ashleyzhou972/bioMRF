@@ -12,8 +12,8 @@ cellline=GM12878_primary+replicate
 #cellline=IMR90
 
 ### Step 0 set up
-#mkdir $homedir/TADs
-#mkdir $homedir/TADs/TADgenes
+mkdir $homedir/TADs
+mkdir $homedir/TADs/TADgenes
 mkdir $homedir/TADs/TADs_all_data
 mkdir $homedir/TADs/TADs_all_data/y
 mkdir $homedir/TADs/TADs_non_data
@@ -25,13 +25,13 @@ mkdir $homedir/TADs/TADs_inter_data/y
 
 ### Step 1 download domain list
 echo "Step 1 Download TAD list..."
-#wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz -P $homedir/TADs
-#gunzip $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz -P $homedir/TADs
+gunzip $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt.gz
 
 
 ### Step 2 Map genes to TADs
 echo "Step 2 Map genes to TADs..."
-#python3 map_ensembl_genes_tad.py $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt $rnaseq $homedir/TADs/TADgenes
+python3 map_ensembl_genes_tad.py $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt $rnaseq $homedir/TADs/TADgenes
 # optional: specify one chromosome
 #python3 map_ensembl_genes_tad.py $homedir/TADs/GSE63525_"$cellline"_Arrowhead_domainlist.txt $rnaseq $homedir/TADs/TADgenes --chr 13
 
@@ -48,13 +48,13 @@ echo "Step 2 Map genes to TADs..."
 
 #### Step 3.1
 echo "Step 3.1 save TAD gene network..."
-#Rscript save_TAD_data_allTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_all_data/
+Rscript save_TAD_data_allTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_all_data/
 #### Step 3.2
 echo "Step 3.2 save non-TAD gene network..."
-#Rscript save_TAD_data_nonTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_non_data/
+Rscript save_TAD_data_nonTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_non_data/
 #### Step 3.3
 echo "Step 3.3 save TAD gene network with intraTAD edges..."
-#Rscript save_TAD_data_intraTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_intra_data/
+Rscript save_TAD_data_intraTAD.R $homedir/TADs/TADgenes $homedir/intra/data/ $homedir/TADs/TADs_intra_data/
 
 # The following step requires the TADs_all_data and TADs_intra_data folders to be filled, as described above (Step 3.1 and 3.3)
 # Note the change in the second argument 
