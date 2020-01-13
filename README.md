@@ -1,9 +1,12 @@
 # bioMRF: Spatial Dependency of Quantitative Gene Expression in the 3D Genome
-This repository provides the scripts to accompany 
 
 Hierarchical Markov Random Field model captures spatial dependency in gene expression, demonstrating regulation via the 3D genome
+
 Naihui Zhou, Iddo Friedberg, Mark S. Kaiser
-bioRxiv 2019.12.16.878371; doi: https://doi.org/10.1101/2019.12.16.878371
+
+bioRxiv 2019.12.16.878371; 
+
+doi: https://doi.org/10.1101/2019.12.16.878371
 
 ### This repository contains 
 - scripts to organize and clean HiC and RNAseq data
