@@ -22,6 +22,7 @@ signal_genes = as.character(read.table(paste0(signalFolder, '/', key,'_genes_ens
 key_all = "ALL"
 savefolder = datafolder
 savepath = paste0(savefolder, key, "_data/")
+print(savepath)
 if (!dir.exists(savepath)){
   dir.create(savepath, showWarnings = T)
   dir.create(paste0(savepath, '/y/'), showWarnings=T)
@@ -51,4 +52,8 @@ med_deg_ratio = round(med_degree/vcount,3)
 max_deg_ratio = round(max_degree/vcount,3)
 num_sing = sum(degree(graph)==0)
 
-cat(paste(vcount, ecount, e_ratio, ev_ratio, med_degree, med_deg_ratio, max_degree, max_deg_ratio, num_sing, "\n", sep = "\t"))
+info.table = c(vcount, ecount, e_ratio, ev_ratio, med_degree, med_deg_ratio, max_degree, max_deg_ratio, num_sing)
+info.table = rbind.data.frame(c("num gene", "num edge", "network density", "edge to node ratio", 
+                        "median degree", "median degree to node ratio", "max degree", 
+                        "max degree to node ratio"), info.table)
+saveRDS(info.table, file = paste0(homefolder, '/functional/info/', key, "_info.rds"))

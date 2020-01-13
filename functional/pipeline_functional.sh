@@ -75,5 +75,5 @@ for GO in "${arr[@]}"
 do
 	key="${GO}_${prop}"
 	echo $key
-	Rscript save_generic_data.R  $key >$homedir/functional/info/out_"$key".info
+	Rscript save_generic_data.R  $key $homedir
 done
